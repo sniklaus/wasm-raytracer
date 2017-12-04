@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<canvas id="idCanvas"></canvas>
+
+		<script type="text/javascript">
+			var intWidth = 500;
+			var intHeight = 500;
+
+			var objectPlanes = [{
+				vecLocation: [0.0, 0.0, 0.0],
+				vecNormal: [0.0, 1.0, 0.0],
+				vecColor: [0.7, 0.7, 0.7],
+				dblSpecular: 10.0,
+				dblReflect: 0.1
+			}];
+
+			var objectSpheres = [{
+				vecLocation: [0.0, 2.0, 0.0],
+				dblRadius: 1.0,
+				vecColor: [1.0, 1.0, 1.0],
+				dblSpecular: 20.0,
+				dblReflect: 0.7
+			}, {
+				vecLocation: [0.0, 1.0, 3.0],
+				dblRadius: 0.7,
+				vecColor: [121.0 / 255.0, 85.0 / 255.0, 72.0 / 255.0],
+				dblSpecular: 10.0,
+				dblReflect: 0.0
+			}, {
+				vecLocation: [0.0, 1.0, -3.0],
+				dblRadius: 0.7,
+				vecColor: [76.0 / 255.0, 175.0 / 255.0, 80.0 / 255.0],
+				dblSpecular: 10.0,
+				dblReflect: 0.0
+			}, {
+				vecLocation: [3.0, 1.0, 0.0],
+				dblRadius: 0.7,
+				vecColor: [41.0 / 255.0, 182.0 / 255.0, 246.0 / 255.0],
+				dblSpecular: 10.0,
+				dblReflect: 0.0
+			}, {
+				vecLocation: [-3.0, 1.0, 0.0],
+				dblRadius: 0.7,
+				vecColor: [255.0 / 255.0, 167.0 / 255.0, 38.0 / 255.0],
+				dblSpecular: 10.0,
+				dblReflect: 0.0
+			}];
+
+			var objectLights = [{
+				vecLocation: [0.0, 10.0, 5.0],
+				vecIntensity: [0.8, 0.8, 0.8]
+			}];
+
+			var vecAmbient = [0.2, 0.2, 0.2];
+
+			var dblTime = 0.3;
+		</script>
+
+		<script type="text/javascript" src="shader.js"></script>
+
+		<script type="text/javascript">
+			var objectCanvas = document.getElementById('idCanvas');
+
+			objectCanvas.width = intWidth;
+			objectCanvas.height = intHeight;
+
+			var objectContext = objectCanvas.getContext('webgl');
+
+			(function functionLoop() {
+				var dblBefore = performance.now();
+
+				dblTime += 0.003;
+				Shader.render(objectContext);
+
+				var dblAfter = performance.now();
+
+				console.log(dblAfter - dblBefore);
+
+				window.setTimeout(functionLoop, 1);
+			})();
+		</script>
+	</body>
+</html>
