@@ -35,7 +35,7 @@ var Javascript = (function() {
 
 			var dblDenominator = dot(vecDirection, objectPlanes[intPlane].vecNormal);
 
-			if (Math.abs(dblDiscriminant) < 0.01) {
+			if (Math.abs(dblDenominator) < 0.01) {
 				continue;
 			}
 
