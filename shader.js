@@ -8,7 +8,7 @@ var Shader = (function() {
 	`;
 
 	var strFragment = `
-		precision mediump float;
+		precision highp float;
 
 		#define Infinity 100000000000.0
 
