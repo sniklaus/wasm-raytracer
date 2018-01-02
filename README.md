@@ -12,8 +12,8 @@ Unsurprisingly, the version using GLSL / Shader is significantly faster than the
 
 |Browser|JavaScript|asm.js|WebAssembly|GLSL / Shader|
 |---|---:|---:|---:|---:|
-|Firefox 57|~407.3 ms|~112.3 ms|~87.4 ms|~0.17 ms|
-|Chrome 62|~191.7 ms|~167.2 ms|~115.7 ms|~0.12 ms|
+|Firefox 57|~407.3 ms|~112.3 ms|~87.4 ms|~1.9 ms|
+|Chrome 62|~191.7 ms|~167.2 ms|~115.7 ms|~2.1 ms|
 
 Note that the JavaScript performance of Firefox 57 is significantly affected by a [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1425687) that should soon be fixed. One might also wonder why asm.js in Chrome is slower than JavaScript, which is due to Chrome not having accelerated support for asm.js in the first place.
 

@@ -69,16 +69,35 @@
 			objectCanvas.height = intHeight;
 
 			var objectContext = objectCanvas.getContext('webgl');
+			var objectTimerext = objectContext.getExtension('EXT_disjoint_timer_query');
+			var objectTimerquery = null;
+
+			if (objectTimerext !== null) {
+				objectTimerquery = objectTimerext.createQueryEXT();
+			}
 
 			(function functionLoop() {
+				var dblElapsed = null;
+				if (objectTimerquery !== null) {
+					if (objectTimerext.getQueryObjectEXT(objectTimerquery, objectTimerext.QUERY_RESULT_AVAILABLE_EXT) === true) {
+						dblElapsed = objectTimerext.getQueryObjectEXT(objectTimerquery, objectTimerext.QUERY_RESULT_EXT) / 1000.0 / 1000.0;
+					}
+				}
+
 				var dblBefore = performance.now();
+				if (objectTimerquery !== null) {
+					objectTimerext.beginQueryEXT(objectTimerext.TIME_ELAPSED_EXT, objectTimerquery);
+				}
 
 				dblTime += 0.003;
 				Shader.render(objectContext);
 
 				var dblAfter = performance.now();
+				if (objectTimerquery !== null) {
+					objectTimerext.endQueryEXT(objectTimerext.TIME_ELAPSED_EXT);
+				}
 
-				console.log(dblAfter - dblBefore);
+				console.log(dblElapsed || (dblAfter - dblBefore));
 
 				window.setTimeout(functionLoop, 1);
 			})();
