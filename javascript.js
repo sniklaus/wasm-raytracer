@@ -27,7 +27,7 @@ var Javascript = (function() {
 		normalize(vecDirection);
 
 		for (var intPlane = 0; intPlane < objectPlanes.length; intPlane += 1) {
-			var vecDifference = [0.0, 0.0, 0.0];
+			var vecDifference = [ 0.0, 0.0, 0.0 ];
 
 			vecDifference[0] = objectPlanes[intPlane].vecLocation[0] - vecOrigin[0];
 			vecDifference[1] = objectPlanes[intPlane].vecLocation[1] - vecOrigin[1];
@@ -62,17 +62,17 @@ var Javascript = (function() {
 
 			objectIntersection.dblDistance = dblDistance;
 
-			objectIntersection.vecLocation = [0.0, 0.0, 0.0];
+			objectIntersection.vecLocation = [ 0.0, 0.0, 0.0 ];
 			objectIntersection.vecLocation[0] = vecOrigin[0] + (dblDistance * vecDirection[0]);
 			objectIntersection.vecLocation[1] = vecOrigin[1] + (dblDistance * vecDirection[1]);
 			objectIntersection.vecLocation[2] = vecOrigin[2] + (dblDistance * vecDirection[2]);
 
-			objectIntersection.vecNormal = [0.0, 0.0, 0.0];
+			objectIntersection.vecNormal = [ 0.0, 0.0, 0.0 ];
 			objectIntersection.vecNormal[0] = objectPlanes[intPlane].vecNormal[0];
 			objectIntersection.vecNormal[1] = objectPlanes[intPlane].vecNormal[1];
 			objectIntersection.vecNormal[2] = objectPlanes[intPlane].vecNormal[2];
 
-			objectIntersection.vecColor = [0.0, 0.0, 0.0];
+			objectIntersection.vecColor = [ 0.0, 0.0, 0.0 ];
 			objectIntersection.vecColor[0] = objectPlanes[intPlane].vecColor[0];
 			objectIntersection.vecColor[1] = objectPlanes[intPlane].vecColor[1];
 			objectIntersection.vecColor[2] = objectPlanes[intPlane].vecColor[2];
@@ -89,7 +89,7 @@ var Javascript = (function() {
 		}
 
 		for (var intSphere = 0; intSphere < objectSpheres.length; intSphere += 1) {
-			var vecDifference = [0.0, 0.0, 0.0];
+			var vecDifference = [ 0.0, 0.0, 0.0 ];
 
 			vecDifference[0] = vecOrigin[0] - objectSpheres[intSphere].vecLocation[0];
 			vecDifference[1] = vecOrigin[1] - objectSpheres[intSphere].vecLocation[1];
@@ -136,17 +136,17 @@ var Javascript = (function() {
 
 			objectIntersection.dblDistance = dblDistance;
 
-			objectIntersection.vecLocation = [0.0, 0.0, 0.0];
+			objectIntersection.vecLocation = [ 0.0, 0.0, 0.0 ];
 			objectIntersection.vecLocation[0] = vecOrigin[0] + (dblDistance * vecDirection[0]);
 			objectIntersection.vecLocation[1] = vecOrigin[1] + (dblDistance * vecDirection[1]);
 			objectIntersection.vecLocation[2] = vecOrigin[2] + (dblDistance * vecDirection[2]);
 
-			objectIntersection.vecNormal = [0.0, 0.0, 0.0];
+			objectIntersection.vecNormal = [ 0.0, 0.0, 0.0 ];
 			objectIntersection.vecNormal[0] = objectIntersection.vecLocation[0] - objectSpheres[intSphere].vecLocation[0];
 			objectIntersection.vecNormal[1] = objectIntersection.vecLocation[1] - objectSpheres[intSphere].vecLocation[1];
 			objectIntersection.vecNormal[2] = objectIntersection.vecLocation[2] - objectSpheres[intSphere].vecLocation[2];
 
-			objectIntersection.vecColor = [0.0, 0.0, 0.0];
+			objectIntersection.vecColor = [ 0.0, 0.0, 0.0 ];
 			objectIntersection.vecColor[0] = objectSpheres[intSphere].vecColor[0];
 			objectIntersection.vecColor[1] = objectSpheres[intSphere].vecColor[1];
 			objectIntersection.vecColor[2] = objectSpheres[intSphere].vecColor[2];
@@ -182,7 +182,7 @@ var Javascript = (function() {
 			var dblSchlick = (1.0 - objectIntersection.dblReflect) + (objectIntersection.dblReflect * Math.pow(1.0 - dblAngle, 5.0));
 
 			for (var intLight = 0; intLight < objectLights.length; intLight += 1) {
-				var vecLight = [0.0, 0.0, 0.0];
+				var vecLight = [ 0.0, 0.0, 0.0 ];
 
 				vecLight[0] = objectLights[intLight].vecLocation[0] - objectIntersection.vecLocation[0];
 				vecLight[1] = objectLights[intLight].vecLocation[1] - objectIntersection.vecLocation[1];
@@ -194,7 +194,7 @@ var Javascript = (function() {
 
 				var dblDiffuse = dot(vecLight, objectIntersection.vecNormal);
 
-				var vecSpecular = [0.0, 0.0, 0.0];
+				var vecSpecular = [ 0.0, 0.0, 0.0 ];
 
 				vecSpecular[0] = vecLight[0] - (2.0 * dblDiffuse * objectIntersection.vecNormal[0]);
 				vecSpecular[1] = vecLight[1] - (2.0 * dblDiffuse * objectIntersection.vecNormal[1]);
@@ -239,14 +239,14 @@ var Javascript = (function() {
 				var dblX = (intX / intWidth) - 0.5;
 				var dblY = 0.5 - (intY / intHeight);
 
-				var vecColor = [0.0, 0.0, 0.0];
-				var vecOrigin = [6.0 * Math.cos(dblTime), 5.0, 6.0 * Math.sin(dblTime)];
-				var vecDirection = [0.0 - vecOrigin[0], 1.0 - vecOrigin[1], 0.0 - vecOrigin[2]];
+				var vecColor = [ 0.0, 0.0, 0.0 ];
+				var vecOrigin = [ 6.0 * Math.cos(dblTime), 5.0, 6.0 * Math.sin(dblTime) ];
+				var vecDirection = [ 0.0 - vecOrigin[0], 1.0 - vecOrigin[1], 0.0 - vecOrigin[2] ];
 
 				normalize(vecDirection);
 
-				var vecRight = [0.0, 0.0, 0.0];
-				var vecUp = [0.0, 1.0, 0.0];
+				var vecRight = [ 0.0, 0.0, 0.0 ];
+				var vecUp = [ 0.0, 1.0, 0.0 ];
 
 				cross(vecRight, vecDirection, vecUp);
 				cross(vecUp, vecRight, vecDirection);

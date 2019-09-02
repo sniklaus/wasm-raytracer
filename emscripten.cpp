@@ -48,7 +48,7 @@ Sphere objectSpheres[16] = {};
 int objectLights_length = 0;
 Light objectLights[16] = {};
 
-double vecAmbient[3] = {0.0, 0.0, 0.0};
+double vecAmbient[3] = { 0.0, 0.0, 0.0 };
 
 double dblTime = 0.0;
 
@@ -80,7 +80,7 @@ static inline double intersection(Intersection* objectIntersection, double* vecO
 	normalize(vecDirection);
 
 	for (int intPlane = 0; intPlane < objectPlanes_length; intPlane += 1) {
-		double vecDifference[3] = {0.0, 0.0, 0.0};
+		double vecDifference[3] = { 0.0, 0.0, 0.0 };
 
 		vecDifference[0] = objectPlanes[intPlane].vecLocation[0] - vecOrigin[0];
 		vecDifference[1] = objectPlanes[intPlane].vecLocation[1] - vecOrigin[1];
@@ -139,7 +139,7 @@ static inline double intersection(Intersection* objectIntersection, double* vecO
 	}
 
 	for (int intSphere = 0; intSphere < objectSpheres_length; intSphere += 1) {
-		double vecDifference[3] = {0.0, 0.0, 0.0};
+		double vecDifference[3] = { 0.0, 0.0, 0.0 };
 
 		vecDifference[0] = vecOrigin[0] - objectSpheres[intSphere].vecLocation[0];
 		vecDifference[1] = vecOrigin[1] - objectSpheres[intSphere].vecLocation[1];
@@ -233,7 +233,7 @@ void raytrace(double* vecColor, double* vecOrigin, double* vecDirection, double 
 		double dblSchlick = (1.0 - objectIntersection.dblReflect) + (objectIntersection.dblReflect * pow(1.0 - dblAngle, 5.0));
 
 		for (int intLight = 0; intLight < objectLights_length; intLight += 1) {
-			double vecLight[3] = {0.0, 0.0, 0.0};
+			double vecLight[3] = { 0.0, 0.0, 0.0 };
 
 			vecLight[0] = objectLights[intLight].vecLocation[0] - objectIntersection.vecLocation[0];
 			vecLight[1] = objectLights[intLight].vecLocation[1] - objectIntersection.vecLocation[1];
@@ -245,7 +245,7 @@ void raytrace(double* vecColor, double* vecOrigin, double* vecDirection, double 
 
 			double dblDiffuse = dot(vecLight, objectIntersection.vecNormal);
 
-			double vecSpecular[3] = {0.0, 0.0, 0.0};
+			double vecSpecular[3] = { 0.0, 0.0, 0.0 };
 
 			vecSpecular[0] = vecLight[0] - (2.0 * dblDiffuse * objectIntersection.vecNormal[0]);
 			vecSpecular[1] = vecLight[1] - (2.0 * dblDiffuse * objectIntersection.vecNormal[1]);
@@ -290,13 +290,13 @@ extern "C" void render(unsigned char* charPixels) {
 			double dblX = (1.0 * intX / intWidth) - 0.5;
 			double dblY = 0.5 - (1.0 * intY / intHeight);
 
-			double vecColor[3] = {0.0, 0.0, 0.0};
+			double vecColor[3] = { 0.0, 0.0, 0.0 };
 			double vecOrigin[3] = {6.0 * cos(dblTime), 5.0, 6.0 * sin(dblTime)};
 			double vecDirection[3] = {0.0 - vecOrigin[0], 1.0 - vecOrigin[1], 0.0 - vecOrigin[2]};
 
 			normalize(vecDirection);
 
-			double vecRight[3] = {0.0, 0.0, 0.0};
+			double vecRight[3] = { 0.0, 0.0, 0.0 };
 			double vecUp[3] = {0.0, 1.0, 0.0};
 
 			cross(vecRight, vecDirection, vecUp);
@@ -447,78 +447,74 @@ void loop() {
 };
 
 extern "C" int main(int argc, char** argv) {
-	{
-		intWidth = 500;
-		intHeight = 500;
+	intWidth = 500;
+	intHeight = 500;
 
-		objectPlanes_length = 1;
-		objectPlanes[0] = (Plane) {
-			{0.0, 0.0, 0.0},
-			{0.0, 1.0, 0.0},
-			{0.7, 0.7, 0.7},
-			10.0,
-			0.1
-		};
+	objectPlanes_length = 1;
+	objectPlanes[0] = (Plane) {
+		{ 0.0, 0.0, 0.0 },
+		{ 0.0, 1.0, 0.0 },
+		{ 0.7, 0.7, 0.7 },
+		10.0,
+		0.1
+	};
 
-		objectSpheres_length = 5;
-		objectSpheres[0] = (Sphere) {
-			{0.0, 2.0, 0.0},
-			1.0,
-			{1.0, 1.0, 1.0},
-			20.0,
-			0.7
-		};
-		objectSpheres[1] = (Sphere) {
-			{0.0, 1.0, 3.0},
-			0.7,
-			{121.0 / 255.0, 85.0 / 255.0, 72.0 / 255.0},
-			10.0,
-			0.0
-		};
-		objectSpheres[2] = (Sphere) {
-			{0.0, 1.0, -3.0},
-			0.7,
-			{76.0 / 255.0, 175.0 / 255.0, 80.0 / 255.0},
-			10.0,
-			0.0
-		};
-		objectSpheres[3] = (Sphere) {
-			{3.0, 1.0, 0.0},
-			0.7,
-			{41.0 / 255.0, 182.0 / 255.0, 246.0 / 255.0},
-			10.0,
-			0.0
-		};
-		objectSpheres[4] = (Sphere) {
-			{-3.0, 1.0, 0.0},
-			0.7,
-			{255.0 / 255.0, 167.0 / 255.0, 38.0 / 255.0},
-			10.0,
-			0.0
-		};
+	objectSpheres_length = 5;
+	objectSpheres[0] = (Sphere) {
+		{ 0.0, 2.0, 0.0 },
+		1.0,
+		{ 1.0, 1.0, 1.0 },
+		20.0,
+		0.7
+	};
+	objectSpheres[1] = (Sphere) {
+		{ 0.0, 1.0, 3.0 },
+		0.7,
+		{ 121.0 / 255.0, 85.0 / 255.0, 72.0 / 255.0 },
+		10.0,
+		0.0
+	};
+	objectSpheres[2] = (Sphere) {
+		{ 0.0, 1.0, -3.0 },
+		0.7,
+		{ 76.0 / 255.0, 175.0 / 255.0, 80.0 / 255.0 },
+		10.0,
+		0.0
+	};
+	objectSpheres[3] = (Sphere) {
+		{ 3.0, 1.0, 0.0 },
+		0.7,
+		{ 41.0 / 255.0, 182.0 / 255.0, 246.0 / 255.0 },
+		10.0,
+		0.0
+	};
+	objectSpheres[4] = (Sphere) {
+		{ -3.0, 1.0, 0.0 },
+		0.7,
+		{ 255.0 / 255.0, 167.0 / 255.0, 38.0 / 255.0 },
+		10.0,
+		0.0
+	};
 
-		objectLights_length = 1;
-		objectLights[0] = (Light) {
-			{0.0, 10.0, 5.0},
-			{0.8, 0.8, 0.8}
-		};
+	objectLights_length = 1;
+	objectLights[0] = (Light) {
+		{ 0.0, 10.0, 5.0 },
+		{ 0.8, 0.8, 0.8 }
+	};
 
-		vecAmbient[0] = 0.2;
-		vecAmbient[1] = 0.2;
-		vecAmbient[2] = 0.2;
+	vecAmbient[0] = 0.2;
+	vecAmbient[1] = 0.2;
+	vecAmbient[2] = 0.2;
 
-		dblTime = 0.3;
-	}
+	dblTime = 0.3;
 
-	{
-		SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_VIDEO);
 
-		objectSurface = SDL_SetVideoMode(intWidth, intHeight, 32, SDL_SWSURFACE);
+	objectSurface = SDL_SetVideoMode(intWidth, intHeight, 32, SDL_SWSURFACE);
 
-		emscripten_set_main_loop(loop, 60, 1);
+	emscripten_set_main_loop(loop, 60, 1);
 
-		SDL_Quit();
-	}
+	SDL_Quit();
 
 	return 0;
 }

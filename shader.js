@@ -250,72 +250,58 @@ var Shader = (function() {
 	function init(objectContext) {
 		objectProgram = objectContext.createProgram();
 
-		{
-			var objectShader = objectContext.createShader(objectContext.VERTEX_SHADER);
-
-			objectContext.shaderSource(objectShader, strVertex);
-			objectContext.compileShader(objectShader);
-			objectContext.attachShader(objectProgram, objectShader);
-
-			if (objectContext.getShaderInfoLog(objectShader).length > 0) {
-				throw objectContext.getShaderInfoLog(objectShader);
-			}
+		var objectVertexshader = objectContext.createShader(objectContext.VERTEX_SHADER);
+		objectContext.shaderSource(objectVertexshader, strVertex);
+		objectContext.compileShader(objectVertexshader);
+		objectContext.attachShader(objectProgram, objectVertexshader);
+		if (objectContext.getShaderInfoLog(objectVertexshader).length > 0) {
+			throw objectContext.getShaderInfoLog(objectVertexshader);
 		}
 
-		{
-			var objectShader = objectContext.createShader(objectContext.FRAGMENT_SHADER);
-
-			objectContext.shaderSource(objectShader, strFragment);
-			objectContext.compileShader(objectShader);
-			objectContext.attachShader(objectProgram, objectShader);
-
-			if (objectContext.getShaderInfoLog(objectShader).length > 0) {
-				throw objectContext.getShaderInfoLog(objectShader);
-			}
+		var objectFragmentshader = objectContext.createShader(objectContext.FRAGMENT_SHADER);
+		objectContext.shaderSource(objectFragmentshader, strFragment);
+		objectContext.compileShader(objectFragmentshader);
+		objectContext.attachShader(objectProgram, objectFragmentshader);
+		if (objectContext.getShaderInfoLog(objectFragmentshader).length > 0) {
+			throw objectContext.getShaderInfoLog(objectFragmentshader);
 		}
 
-		{
-			objectContext.linkProgram(objectProgram);
-			objectContext.useProgram(objectProgram);
+		objectContext.linkProgram(objectProgram);
+		objectContext.useProgram(objectProgram);
+
+		objectContext.enableVertexAttribArray(objectContext.getAttribLocation(objectProgram, 'vecPosition'));
+		objectContext.bindBuffer(objectContext.ARRAY_BUFFER, objectContext.createBuffer());
+		objectContext.bufferData(objectContext.ARRAY_BUFFER, new Float32Array([ -1.0,  1.0, -1.0, -1.0, 1.0,  1.0, 1.0,  1.0, -1.0, -1.0, 1.0, -1.0 ]), objectContext.STATIC_DRAW);
+		objectContext.vertexAttribPointer(objectContext.getAttribLocation(objectProgram, 'vecPosition'), 2, objectContext.FLOAT, false, 0, 0);
+
+		objectContext.uniform1i(objectContext.getUniformLocation(objectProgram, 'intWidth'), intWidth);
+		objectContext.uniform1i(objectContext.getUniformLocation(objectProgram, 'intHeight'), intHeight);
+
+		objectContext.uniform1i(objectContext.getUniformLocation(objectProgram, 'objectPlanes_length'), objectPlanes.length);
+		for (var intPlane = 0; intPlane < objectPlanes.length; intPlane += 1) {
+			objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectPlanes[' + intPlane + '].vecLocation'), objectPlanes[intPlane].vecLocation);
+			objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectPlanes[' + intPlane + '].vecNormal'), objectPlanes[intPlane].vecNormal);
+			objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectPlanes[' + intPlane + '].vecColor'), objectPlanes[intPlane].vecColor);
+			objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'objectPlanes[' + intPlane + '].dblSpecular'), objectPlanes[intPlane].dblSpecular);
+			objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'objectPlanes[' + intPlane + '].dblReflect'), objectPlanes[intPlane].dblReflect);
 		}
 
-		{
-			objectContext.enableVertexAttribArray(objectContext.getAttribLocation(objectProgram, 'vecPosition'));
-			objectContext.bindBuffer(objectContext.ARRAY_BUFFER, objectContext.createBuffer());
-			objectContext.bufferData(objectContext.ARRAY_BUFFER, new Float32Array([-1.0,  1.0, -1.0, -1.0, 1.0,  1.0, 1.0,  1.0, -1.0, -1.0, 1.0, -1.0]), objectContext.STATIC_DRAW);
-			objectContext.vertexAttribPointer(objectContext.getAttribLocation(objectProgram, 'vecPosition'), 2, objectContext.FLOAT, false, 0, 0);
+		objectContext.uniform1i(objectContext.getUniformLocation(objectProgram, 'objectSpheres_length'), objectSpheres.length);
+		for (var intSphere = 0; intSphere < objectSpheres.length; intSphere += 1) {
+			objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectSpheres[' + intSphere + '].vecLocation'), objectSpheres[intSphere].vecLocation);
+			objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'objectSpheres[' + intSphere + '].dblRadius'), objectSpheres[intSphere].dblRadius);
+			objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectSpheres[' + intSphere + '].vecColor'), objectSpheres[intSphere].vecColor);
+			objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'objectSpheres[' + intSphere + '].dblSpecular'), objectSpheres[intSphere].dblSpecular);
+			objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'objectSpheres[' + intSphere + '].dblReflect'), objectSpheres[intSphere].dblReflect);
 		}
 
-		{
-			objectContext.uniform1i(objectContext.getUniformLocation(objectProgram, 'intWidth'), intWidth);
-			objectContext.uniform1i(objectContext.getUniformLocation(objectProgram, 'intHeight'), intHeight);
-
-			objectContext.uniform1i(objectContext.getUniformLocation(objectProgram, 'objectPlanes_length'), objectPlanes.length);
-			for (var intPlane = 0; intPlane < objectPlanes.length; intPlane += 1) {
-				objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectPlanes[' + intPlane + '].vecLocation'), objectPlanes[intPlane].vecLocation);
-				objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectPlanes[' + intPlane + '].vecNormal'), objectPlanes[intPlane].vecNormal);
-				objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectPlanes[' + intPlane + '].vecColor'), objectPlanes[intPlane].vecColor);
-				objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'objectPlanes[' + intPlane + '].dblSpecular'), objectPlanes[intPlane].dblSpecular);
-				objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'objectPlanes[' + intPlane + '].dblReflect'), objectPlanes[intPlane].dblReflect);
-			}
-
-			objectContext.uniform1i(objectContext.getUniformLocation(objectProgram, 'objectSpheres_length'), objectSpheres.length);
-			for (var intSphere = 0; intSphere < objectSpheres.length; intSphere += 1) {
-				objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectSpheres[' + intSphere + '].vecLocation'), objectSpheres[intSphere].vecLocation);
-				objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'objectSpheres[' + intSphere + '].dblRadius'), objectSpheres[intSphere].dblRadius);
-				objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectSpheres[' + intSphere + '].vecColor'), objectSpheres[intSphere].vecColor);
-				objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'objectSpheres[' + intSphere + '].dblSpecular'), objectSpheres[intSphere].dblSpecular);
-				objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'objectSpheres[' + intSphere + '].dblReflect'), objectSpheres[intSphere].dblReflect);
-			}
-
-			objectContext.uniform1i(objectContext.getUniformLocation(objectProgram, 'objectLights_length'), objectLights.length);
-			for (var intLight = 0; intLight < objectLights.length; intLight += 1) {
-				objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectLights[' + intLight + '].vecLocation'), objectLights[intLight].vecLocation);
-				objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectLights[' + intLight + '].vecIntensity'), objectLights[intLight].vecIntensity);
-			}
-
-			objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'vecAmbient'), vecAmbient);
+		objectContext.uniform1i(objectContext.getUniformLocation(objectProgram, 'objectLights_length'), objectLights.length);
+		for (var intLight = 0; intLight < objectLights.length; intLight += 1) {
+			objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectLights[' + intLight + '].vecLocation'), objectLights[intLight].vecLocation);
+			objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectLights[' + intLight + '].vecIntensity'), objectLights[intLight].vecIntensity);
 		}
+
+		objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'vecAmbient'), vecAmbient);
 	}
 
 	function render(objectContext) {
