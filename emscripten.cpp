@@ -1,8 +1,37 @@
 #include <assert.h>
-#include <emscripten.h>
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <map>
+#include <vector>
+
+#define minimum(intA, intB) (intA < intB) ? (intA) : (intB)
+#define maximum(intA, intB) (intA > intB) ? (intA) : (intB)
+
+static inline unsigned long long milliseconds() {
+	timespec objectTimespec = { };
+
+	clock_gettime(CLOCK_MONOTONIC, &objectTimespec);
+
+	return (objectTimespec.tv_sec * 1000) + (objectTimespec.tv_nsec / 1000000);
+}
+
+static inline unsigned long long microseconds() {
+	timespec objectTimespec = { };
+
+	clock_gettime(CLOCK_MONOTONIC, &objectTimespec);
+
+	return (objectTimespec.tv_sec * 1000000) + (objectTimespec.tv_nsec / 1000);
+}
+
+#include "emscripten.h"
+
+// ----------------------------------------------------------
 
 #define Infinity 100000000000.0
 
@@ -316,7 +345,7 @@ extern "C" void render(unsigned char* charPixels) {
 	}
 }
 
-// ---------------------------------------------
+// ----------------------------------------------------------
 
 extern "C" void uniform1i(char* charVariable, int intIndex, int intValue) {
 	if (strcmp(charVariable, "intWidth") == 0) {
@@ -403,28 +432,11 @@ extern "C" void uniform3fv(char* charVariable, int intIndex, double dblValue_0, 
 	}
 }
 
-// ---------------------------------------------
+// ----------------------------------------------------------
 
-#include <ctime>
 #include <SDL/SDL.h>
 
 SDL_Surface* objectSurface = NULL;
-
-static inline unsigned long long milliseconds() {
-	timespec objectTimespec = { };
-
-	clock_gettime(CLOCK_MONOTONIC, &objectTimespec);
-
-	return (objectTimespec.tv_sec * 1000) + (objectTimespec.tv_nsec / 1000000);
-}
-
-static inline unsigned long long microseconds() {
-	timespec objectTimespec = { };
-
-	clock_gettime(CLOCK_MONOTONIC, &objectTimespec);
-
-	return (objectTimespec.tv_sec * 1000000) + (objectTimespec.tv_nsec / 1000);
-}
 
 void loop() {
 	unsigned long long intBefore = milliseconds();
