@@ -1,4 +1,4 @@
-# experimental-raytracer
+# webassembly-raytracer
 While teaching a web development class, I wanted to present some benchmarks that show the performance benefits of asm.js as well as WebAssembly. I was unfortunately not able to find a suitable reference though. Therefore, I implemented a simplistic [raytracer](http://sniklaus.com/blog/raytracer) in JavaScript as well as in C++ with a similar code structure while utilizing Emscripten accordingly. For fun, I also translated the code to GLSL and am utilizing WebGL to leverage GPU computing. 
 
 <p align="center"><a href="https://sniklaus.com/blog/raytracer" rel="Paper"><img src="https://content.sniklaus.com/raytracer/screenshot.png" alt="Screenshot"></a></p>
