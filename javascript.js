@@ -8,11 +8,11 @@ var Javascript = (function() {
 	}
 
 	function normalize(vecA) {
-		var dblLength = Math.max(0.00001, length(vecA));
+		var fltLength = Math.max(0.00001, length(vecA));
 
-		vecA[0] /= dblLength;
-		vecA[1] /= dblLength;
-		vecA[2] /= dblLength;
+		vecA[0] /= fltLength;
+		vecA[1] /= fltLength;
+		vecA[2] /= fltLength;
 	}
 
 	function cross(vecA, vecB, vecC) {
@@ -21,226 +21,224 @@ var Javascript = (function() {
 		vecA[2] = (vecB[0] * vecC[1]) - (vecB[1] * vecC[0]);
 	}
 
-	function intersection(objectIntersection, vecOrigin, vecDirection, dblMin, dblMax) {
-		var dblIntersection = Infinity;
+	function intersection(objIntersection, vecOrigin, vecDirection, fltMin, fltMax, boolPeek) {
+		var fltIntersection = Infinity;
 
 		normalize(vecDirection);
 
-		for (var intPlane = 0; intPlane < objectPlanes.length; intPlane += 1) {
+		for (var intPlane = 0; intPlane < objPlanes.length; intPlane += 1) {
 			var vecDifference = [ 0.0, 0.0, 0.0 ];
 
-			vecDifference[0] = objectPlanes[intPlane].vecLocation[0] - vecOrigin[0];
-			vecDifference[1] = objectPlanes[intPlane].vecLocation[1] - vecOrigin[1];
-			vecDifference[2] = objectPlanes[intPlane].vecLocation[2] - vecOrigin[2];
+			vecDifference[0] = objPlanes[intPlane].vecLocation[0] - vecOrigin[0];
+			vecDifference[1] = objPlanes[intPlane].vecLocation[1] - vecOrigin[1];
+			vecDifference[2] = objPlanes[intPlane].vecLocation[2] - vecOrigin[2];
 
-			var dblDenominator = dot(vecDirection, objectPlanes[intPlane].vecNormal);
+			var fltDenominator = dot(vecDirection, objPlanes[intPlane].vecNormal);
 
-			if (Math.abs(dblDenominator) < 0.01) {
+			if (Math.abs(fltDenominator) < 0.01) {
 				continue;
 			}
 
-			var dblDistance = dot(vecDifference, objectPlanes[intPlane].vecNormal) / dblDenominator;
+			var fltDistance = dot(vecDifference, objPlanes[intPlane].vecNormal) / fltDenominator;
 
-			if (dblDistance < dblMin) {
+			if (fltDistance < fltMin) {
 				continue;
 
-			} else if (dblDistance > dblMax) {
+			} else if (fltDistance > fltMax) {
 				continue;
 
-			} else if (dblDistance > dblIntersection) {
+			} else if (fltDistance > fltIntersection) {
 				continue;
 
 			}
 
-			if (dblIntersection == Infinity) {
-				if (objectIntersection.hasOwnProperty('dblDistance') == true) {
-					return dblDistance;
-				}
+			if (boolPeek == true) {
+				return fltDistance;
 			}
 
-			dblIntersection = dblDistance;
+			fltIntersection = fltDistance;
 
-			objectIntersection.dblDistance = dblDistance;
+			objIntersection.fltDistance = fltDistance;
 
-			objectIntersection.vecLocation = [ 0.0, 0.0, 0.0 ];
-			objectIntersection.vecLocation[0] = vecOrigin[0] + (dblDistance * vecDirection[0]);
-			objectIntersection.vecLocation[1] = vecOrigin[1] + (dblDistance * vecDirection[1]);
-			objectIntersection.vecLocation[2] = vecOrigin[2] + (dblDistance * vecDirection[2]);
+			objIntersection.vecLocation = [ 0.0, 0.0, 0.0 ];
+			objIntersection.vecLocation[0] = vecOrigin[0] + (fltDistance * vecDirection[0]);
+			objIntersection.vecLocation[1] = vecOrigin[1] + (fltDistance * vecDirection[1]);
+			objIntersection.vecLocation[2] = vecOrigin[2] + (fltDistance * vecDirection[2]);
 
-			objectIntersection.vecNormal = [ 0.0, 0.0, 0.0 ];
-			objectIntersection.vecNormal[0] = objectPlanes[intPlane].vecNormal[0];
-			objectIntersection.vecNormal[1] = objectPlanes[intPlane].vecNormal[1];
-			objectIntersection.vecNormal[2] = objectPlanes[intPlane].vecNormal[2];
+			objIntersection.vecNormal = [ 0.0, 0.0, 0.0 ];
+			objIntersection.vecNormal[0] = objPlanes[intPlane].vecNormal[0];
+			objIntersection.vecNormal[1] = objPlanes[intPlane].vecNormal[1];
+			objIntersection.vecNormal[2] = objPlanes[intPlane].vecNormal[2];
 
-			objectIntersection.vecColor = [ 0.0, 0.0, 0.0 ];
-			objectIntersection.vecColor[0] = objectPlanes[intPlane].vecColor[0];
-			objectIntersection.vecColor[1] = objectPlanes[intPlane].vecColor[1];
-			objectIntersection.vecColor[2] = objectPlanes[intPlane].vecColor[2];
+			objIntersection.vecColor = [ 0.0, 0.0, 0.0 ];
+			objIntersection.vecColor[0] = objPlanes[intPlane].vecColor[0];
+			objIntersection.vecColor[1] = objPlanes[intPlane].vecColor[1];
+			objIntersection.vecColor[2] = objPlanes[intPlane].vecColor[2];
 
-			objectIntersection.dblSpecular = objectPlanes[intPlane].dblSpecular;
+			objIntersection.fltSpecular = objPlanes[intPlane].fltSpecular;
 
-			objectIntersection.dblReflect = objectPlanes[intPlane].dblReflect;
+			objIntersection.fltReflect = objPlanes[intPlane].fltReflect;
 
-			var dblCheckerboard = Math.abs(Math.floor(objectIntersection.vecLocation[0]) + Math.floor(objectIntersection.vecLocation[2])) % 2.0;
+			var fltCheckerboard = Math.abs(Math.floor(objIntersection.vecLocation[0]) + Math.floor(objIntersection.vecLocation[2])) % 2.0;
 
-			objectIntersection.vecColor[0] *= 0.5 + (0.5 * dblCheckerboard);
-			objectIntersection.vecColor[1] *= 0.5 + (0.5 * dblCheckerboard);
-			objectIntersection.vecColor[2] *= 0.5 + (0.5 * dblCheckerboard);
+			objIntersection.vecColor[0] *= 0.5 + (0.5 * fltCheckerboard);
+			objIntersection.vecColor[1] *= 0.5 + (0.5 * fltCheckerboard);
+			objIntersection.vecColor[2] *= 0.5 + (0.5 * fltCheckerboard);
 		}
 
-		for (var intSphere = 0; intSphere < objectSpheres.length; intSphere += 1) {
+		for (var intSphere = 0; intSphere < objSpheres.length; intSphere += 1) {
 			var vecDifference = [ 0.0, 0.0, 0.0 ];
 
-			vecDifference[0] = vecOrigin[0] - objectSpheres[intSphere].vecLocation[0];
-			vecDifference[1] = vecOrigin[1] - objectSpheres[intSphere].vecLocation[1];
-			vecDifference[2] = vecOrigin[2] - objectSpheres[intSphere].vecLocation[2];
+			vecDifference[0] = vecOrigin[0] - objSpheres[intSphere].vecLocation[0];
+			vecDifference[1] = vecOrigin[1] - objSpheres[intSphere].vecLocation[1];
+			vecDifference[2] = vecOrigin[2] - objSpheres[intSphere].vecLocation[2];
 
-			var dblAlpha = dot(vecDirection, vecDifference);
-			var dblDiscriminant = (dblAlpha * dblAlpha) - dot(vecDifference, vecDifference) + (objectSpheres[intSphere].dblRadius * objectSpheres[intSphere].dblRadius);
+			var fltAlpha = dot(vecDirection, vecDifference);
+			var fltDiscriminant = (fltAlpha * fltAlpha) - dot(vecDifference, vecDifference) + (objSpheres[intSphere].fltRadius * objSpheres[intSphere].fltRadius);
 
-			if (dblDiscriminant < 0.01) {
+			if (fltDiscriminant < 0.01) {
 				continue;
 			}
 
-			var dblFirst = (-1.0 * dblAlpha) - Math.sqrt(dblDiscriminant);
-			var dblSecond = (-1.0 * dblAlpha) + Math.sqrt(dblDiscriminant);
-			var dblDistance = Infinity;
+			var fltFirst = (-1.0 * fltAlpha) - Math.sqrt(fltDiscriminant);
+			var fltSecond = (-1.0 * fltAlpha) + Math.sqrt(fltDiscriminant);
+			var fltDistance = Infinity;
 
-			if (dblFirst > dblMin) {
-				if (dblFirst < dblMax) {
-					dblDistance = Math.min(dblDistance, dblFirst);
+			if (fltFirst > fltMin) {
+				if (fltFirst < fltMax) {
+					fltDistance = Math.min(fltDistance, fltFirst);
 				}
 			}
 
-			if (dblSecond > dblMin) {
-				if (dblSecond < dblMax) {
-					dblDistance = Math.min(dblDistance, dblSecond);
+			if (fltSecond > fltMin) {
+				if (fltSecond < fltMax) {
+					fltDistance = Math.min(fltDistance, fltSecond);
 				}
 			}
 
-			if (dblDistance == Infinity) {
+			if (fltDistance == Infinity) {
 				continue;
 
-			} else if (dblDistance > dblIntersection) {
+			} else if (fltDistance > fltIntersection) {
 				continue;
 
 			}
 
-			if (dblIntersection == Infinity) {
-				if (objectIntersection.hasOwnProperty('dblDistance') == true) {
-					return dblDistance;
-				}
+			if (boolPeek == true) {
+				return fltDistance;
 			}
 
-			dblIntersection = dblDistance;
+			fltIntersection = fltDistance;
 
-			objectIntersection.dblDistance = dblDistance;
+			objIntersection.fltDistance = fltDistance;
 
-			objectIntersection.vecLocation = [ 0.0, 0.0, 0.0 ];
-			objectIntersection.vecLocation[0] = vecOrigin[0] + (dblDistance * vecDirection[0]);
-			objectIntersection.vecLocation[1] = vecOrigin[1] + (dblDistance * vecDirection[1]);
-			objectIntersection.vecLocation[2] = vecOrigin[2] + (dblDistance * vecDirection[2]);
+			objIntersection.vecLocation = [ 0.0, 0.0, 0.0 ];
+			objIntersection.vecLocation[0] = vecOrigin[0] + (fltDistance * vecDirection[0]);
+			objIntersection.vecLocation[1] = vecOrigin[1] + (fltDistance * vecDirection[1]);
+			objIntersection.vecLocation[2] = vecOrigin[2] + (fltDistance * vecDirection[2]);
 
-			objectIntersection.vecNormal = [ 0.0, 0.0, 0.0 ];
-			objectIntersection.vecNormal[0] = objectIntersection.vecLocation[0] - objectSpheres[intSphere].vecLocation[0];
-			objectIntersection.vecNormal[1] = objectIntersection.vecLocation[1] - objectSpheres[intSphere].vecLocation[1];
-			objectIntersection.vecNormal[2] = objectIntersection.vecLocation[2] - objectSpheres[intSphere].vecLocation[2];
+			objIntersection.vecNormal = [ 0.0, 0.0, 0.0 ];
+			objIntersection.vecNormal[0] = objIntersection.vecLocation[0] - objSpheres[intSphere].vecLocation[0];
+			objIntersection.vecNormal[1] = objIntersection.vecLocation[1] - objSpheres[intSphere].vecLocation[1];
+			objIntersection.vecNormal[2] = objIntersection.vecLocation[2] - objSpheres[intSphere].vecLocation[2];
 
-			objectIntersection.vecColor = [ 0.0, 0.0, 0.0 ];
-			objectIntersection.vecColor[0] = objectSpheres[intSphere].vecColor[0];
-			objectIntersection.vecColor[1] = objectSpheres[intSphere].vecColor[1];
-			objectIntersection.vecColor[2] = objectSpheres[intSphere].vecColor[2];
+			objIntersection.vecColor = [ 0.0, 0.0, 0.0 ];
+			objIntersection.vecColor[0] = objSpheres[intSphere].vecColor[0];
+			objIntersection.vecColor[1] = objSpheres[intSphere].vecColor[1];
+			objIntersection.vecColor[2] = objSpheres[intSphere].vecColor[2];
 
-			objectIntersection.dblSpecular = objectSpheres[intSphere].dblSpecular;
+			objIntersection.fltSpecular = objSpheres[intSphere].fltSpecular;
 
-			objectIntersection.dblReflect = objectSpheres[intSphere].dblReflect;
+			objIntersection.fltReflect = objSpheres[intSphere].fltReflect;
 		}
 
-		if (dblIntersection < dblMax) {
-			normalize(objectIntersection.vecNormal);
+		if (boolPeek != true) {
+			if (fltIntersection < fltMax) {
+				normalize(objIntersection.vecNormal);
+			}
 		}
 
-		return dblIntersection;
+		return fltIntersection;
 	}
 
-	function raytrace(vecColor, vecOrigin, vecDirection, dblMin, dblMax) {
+	function raytrace(vecColor, vecOrigin, vecDirection, fltMin, fltMax) {
 		vecColor[0] = 0.0;
 		vecColor[1] = 0.0;
 		vecColor[2] = 0.0;
 
-		var dblReflect = 1.0;
+		var fltReflect = 1.0;
 
 		for (var intRecurse = 0; intRecurse < 8; intRecurse += 1) {
-			var objectIntersection = {};
+			var objIntersection = {};
 
-			if (intersection(objectIntersection, vecOrigin, vecDirection, dblMin, dblMax) > 10000.0) {
+			if (intersection(objIntersection, vecOrigin, vecDirection, fltMin, fltMax, false) > 10000.0) {
 				return;
 			}
 
-			var dblAngle = Math.abs(dot(vecDirection, objectIntersection.vecNormal));
+			var fltAngle = Math.abs(dot(vecDirection, objIntersection.vecNormal));
 
-			var dblSchlick = (1.0 - objectIntersection.dblReflect) + (objectIntersection.dblReflect * Math.pow(1.0 - dblAngle, 5.0));
+			var fltSchlick = (1.0 - objIntersection.fltReflect) + (objIntersection.fltReflect * Math.pow(1.0 - fltAngle, 5.0));
 
-			for (var intLight = 0; intLight < objectLights.length; intLight += 1) {
+			for (var intLight = 0; intLight < objLights.length; intLight += 1) {
 				var vecLight = [ 0.0, 0.0, 0.0 ];
 
-				vecLight[0] = objectLights[intLight].vecLocation[0] - objectIntersection.vecLocation[0];
-				vecLight[1] = objectLights[intLight].vecLocation[1] - objectIntersection.vecLocation[1];
-				vecLight[2] = objectLights[intLight].vecLocation[2] - objectIntersection.vecLocation[2];
+				vecLight[0] = objLights[intLight].vecLocation[0] - objIntersection.vecLocation[0];
+				vecLight[1] = objLights[intLight].vecLocation[1] - objIntersection.vecLocation[1];
+				vecLight[2] = objLights[intLight].vecLocation[2] - objIntersection.vecLocation[2];
 
-				if (intersection(objectIntersection, objectIntersection.vecLocation, vecLight, 0.01, 10000.0) < 10000.0) {
+				if (intersection(objIntersection, objIntersection.vecLocation, vecLight, 0.01, 10000.0, true) < 10000.0) {
 					continue;
 				}
 
-				var dblDiffuse = dot(vecLight, objectIntersection.vecNormal);
+				var fltDiffuse = dot(vecLight, objIntersection.vecNormal);
 
 				var vecSpecular = [ 0.0, 0.0, 0.0 ];
 
-				vecSpecular[0] = vecLight[0] - (2.0 * dblDiffuse * objectIntersection.vecNormal[0]);
-				vecSpecular[1] = vecLight[1] - (2.0 * dblDiffuse * objectIntersection.vecNormal[1]);
-				vecSpecular[2] = vecLight[2] - (2.0 * dblDiffuse * objectIntersection.vecNormal[2]);
+				vecSpecular[0] = vecLight[0] - (2.0 * fltDiffuse * objIntersection.vecNormal[0]);
+				vecSpecular[1] = vecLight[1] - (2.0 * fltDiffuse * objIntersection.vecNormal[1]);
+				vecSpecular[2] = vecLight[2] - (2.0 * fltDiffuse * objIntersection.vecNormal[2]);
 
-				var dblSpecular = Math.max(0.01, Math.pow(dot(vecDirection, vecSpecular), objectIntersection.dblSpecular));
+				var fltSpecular = Math.max(0.01, Math.pow(dot(vecDirection, vecSpecular), objIntersection.fltSpecular));
 
-				vecColor[0] += dblReflect * dblSchlick * (dblDiffuse + dblSpecular) * objectIntersection.vecColor[0] * objectLights[intLight].vecIntensity[0];
-				vecColor[1] += dblReflect * dblSchlick * (dblDiffuse + dblSpecular) * objectIntersection.vecColor[1] * objectLights[intLight].vecIntensity[1];
-				vecColor[2] += dblReflect * dblSchlick * (dblDiffuse + dblSpecular) * objectIntersection.vecColor[2] * objectLights[intLight].vecIntensity[2];
+				vecColor[0] += fltReflect * fltSchlick * (fltDiffuse + fltSpecular) * objIntersection.vecColor[0] * objLights[intLight].vecIntensity[0];
+				vecColor[1] += fltReflect * fltSchlick * (fltDiffuse + fltSpecular) * objIntersection.vecColor[1] * objLights[intLight].vecIntensity[1];
+				vecColor[2] += fltReflect * fltSchlick * (fltDiffuse + fltSpecular) * objIntersection.vecColor[2] * objLights[intLight].vecIntensity[2];
 			}
 
-			vecColor[0] += dblReflect * dblSchlick * objectIntersection.vecColor[0] * vecAmbient[0];
-			vecColor[1] += dblReflect * dblSchlick * objectIntersection.vecColor[1] * vecAmbient[1];
-			vecColor[2] += dblReflect * dblSchlick * objectIntersection.vecColor[2] * vecAmbient[2];
+			vecColor[0] += fltReflect * fltSchlick * objIntersection.vecColor[0] * vecAmbient[0];
+			vecColor[1] += fltReflect * fltSchlick * objIntersection.vecColor[1] * vecAmbient[1];
+			vecColor[2] += fltReflect * fltSchlick * objIntersection.vecColor[2] * vecAmbient[2];
 
-			dblReflect *= 1.0 - dblSchlick;
+			fltReflect *= 1.0 - fltSchlick;
 
-			if (dblReflect < 0.01) {
+			if (fltReflect < 0.01) {
 				break;
 			}
 
-			var dblReflection = dot(vecDirection, objectIntersection.vecNormal);
+			var fltReflection = dot(vecDirection, objIntersection.vecNormal);
 
-			vecOrigin[0] = objectIntersection.vecLocation[0];
-			vecOrigin[1] = objectIntersection.vecLocation[1];
-			vecOrigin[2] = objectIntersection.vecLocation[2];
+			vecOrigin[0] = objIntersection.vecLocation[0];
+			vecOrigin[1] = objIntersection.vecLocation[1];
+			vecOrigin[2] = objIntersection.vecLocation[2];
 
-			vecDirection[0] = vecDirection[0] - (2.0 * dblReflection * objectIntersection.vecNormal[0]);
-			vecDirection[1] = vecDirection[1] - (2.0 * dblReflection * objectIntersection.vecNormal[1]);
-			vecDirection[2] = vecDirection[2] - (2.0 * dblReflection * objectIntersection.vecNormal[2]);
+			vecDirection[0] = vecDirection[0] - (2.0 * fltReflection * objIntersection.vecNormal[0]);
+			vecDirection[1] = vecDirection[1] - (2.0 * fltReflection * objIntersection.vecNormal[1]);
+			vecDirection[2] = vecDirection[2] - (2.0 * fltReflection * objIntersection.vecNormal[2]);
 
-			dblMin = 0.01;
+			fltMin = 0.01;
 
-			dblMax = 10000.0;
+			fltMax = 10000.0;
 		}
 	}
 
 	function render(charPixels) {
 		for (var intY = 0; intY < intHeight; intY += 1) {
 			for (var intX = 0; intX < intWidth; intX += 1) {
-				var dblX = (intX / intWidth) - 0.5;
-				var dblY = 0.5 - (intY / intHeight);
+				var fltX = (intX / intWidth) - 0.5;
+				var fltY = 0.5 - (intY / intHeight);
 
 				var vecColor = [ 0.0, 0.0, 0.0 ];
-				var vecOrigin = [ 6.0 * Math.cos(dblTime), 5.0, 6.0 * Math.sin(dblTime) ];
+				var vecOrigin = [ 6.0 * Math.cos(fltTime), 5.0, 6.0 * Math.sin(fltTime) ];
 				var vecDirection = [ 0.0 - vecOrigin[0], 1.0 - vecOrigin[1], 0.0 - vecOrigin[2] ];
 
 				normalize(vecDirection);
@@ -251,9 +249,9 @@ var Javascript = (function() {
 				cross(vecRight, vecDirection, vecUp);
 				cross(vecUp, vecRight, vecDirection);
 
-				vecDirection[0] += (dblX * vecRight[0]) + (dblY * vecUp[0]);
-				vecDirection[1] += (dblX * vecRight[1]) + (dblY * vecUp[1]);
-				vecDirection[2] += (dblX * vecRight[2]) + (dblY * vecUp[2]);
+				vecDirection[0] += (fltX * vecRight[0]) + (fltY * vecUp[0]);
+				vecDirection[1] += (fltX * vecRight[1]) + (fltY * vecUp[1]);
+				vecDirection[2] += (fltX * vecRight[2]) + (fltY * vecUp[2]);
 
 				raytrace(vecColor, vecOrigin, vecDirection, 1.0, 10000.0);
 

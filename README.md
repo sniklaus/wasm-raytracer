@@ -1,9 +1,9 @@
-# webassembly-raytracer
-While teaching a web development class, I wanted to present some benchmarks that show the performance benefits of asm.js as well as WebAssembly. I was unfortunately not able to find a suitable reference though. Therefore, I implemented a simplistic [raytracer](http://sniklaus.com/blog/raytracer) in JavaScript as well as in C++ with a similar code structure while utilizing Emscripten accordingly. For fun, I also translated the code to GLSL and am utilizing WebGL to leverage GPU computing. 
+# wasm-raytracer
+While teaching a web development class, I wanted to present some benchmarks that show the performance benefits of asm.js as well as WebAssembly. I was unfortunately not able to find a suitable reference. Therefore, I implemented a simplistic [raytracer](http://sniklaus.com/raytracer) in JavaScript as well as in C++ with a similar code structure while utilizing Emscripten to compile the C++ raytracer to asm.js as well as WebAssembly. For fun, I also translated the code to GLSL and am utilizing WebGL to leverage GPU computing.
 
-<p align="center"><a href="https://sniklaus.com/blog/raytracer" rel="Paper"><img src="https://content.sniklaus.com/raytracer/screenshot.png" alt="Screenshot"></a></p>
+<p align="center"><a href="https://sniklaus.com/wasmray" rel="Paper"><img src="https://content.sniklaus.com/wasmray/screenshot.png" alt="Screenshot"></a></p>
 
-For a live demo, please see: https://sniklaus.com/blog/raytracer
+For a live demo, please see: https://sniklaus.com/wasmray
 <br />
 For a discussion, see Reddit: https://www.reddit.com/r/programming/comments/7k4v5t/
 
@@ -17,7 +17,7 @@ Unsurprisingly, the version using GLSL / Shader is significantly faster than the
 |Chrome 62|~191.7 ms|~167.2 ms|~115.7 ms|~2.1 ms|
 |Chrome 63|~181.4 ms|~154.2 ms|~120.7 ms|~2.2 ms|
 
-Note that the JavaScript performance of Firefox 57 is significantly affected by a [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1425687) that should soon be fixed. One might also wonder why asm.js in Chrome is slower than JavaScript, which is due to Chrome not having accelerated support for asm.js in the first place.
+Note that the JavaScript performance of Firefox 57 is significantly affected by a [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1425687) that has since been fixed. One might also wonder why asm.js in Chrome is slower than JavaScript, which is due to Chrome not having accelerated support for asm.js in the first place.
 
 ## license
 Please refer to the appropriate file within this repository.

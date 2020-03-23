@@ -16,16 +16,16 @@ var Shader = (function() {
 			vec3 vecLocation;
 			vec3 vecNormal;
 			vec3 vecColor;
-			float dblSpecular;
-			float dblReflect;
+			float fltSpecular;
+			float fltReflect;
 		};
 
 		struct Sphere {
 			vec3 vecLocation;
-			float dblRadius;
+			float fltRadius;
 			vec3 vecColor;
-			float dblSpecular;
-			float dblReflect;
+			float fltSpecular;
+			float fltReflect;
 		};
 
 		struct Light {
@@ -34,199 +34,197 @@ var Shader = (function() {
 		};
 
 		struct Intersection {
-			float dblDistance;
+			float fltDistance;
 			vec3 vecLocation;
 			vec3 vecNormal;
 			vec3 vecColor;
-			float dblSpecular;
-			float dblReflect;
+			float fltSpecular;
+			float fltReflect;
 		};
 
 		uniform int intWidth;
 		uniform int intHeight;
 
-		uniform int objectPlanes_length;
-		uniform Plane objectPlanes[16];
+		uniform int objPlanes_length;
+		uniform Plane objPlanes[16];
 
-		uniform int objectSpheres_length;
-		uniform Sphere objectSpheres[16];
+		uniform int objSpheres_length;
+		uniform Sphere objSpheres[16];
 
-		uniform int objectLights_length;
-		uniform Light objectLights[16];
+		uniform int objLights_length;
+		uniform Light objLights[16];
 
 		uniform vec3 vecAmbient;
 
-		uniform float dblTime;
+		uniform float fltTime;
 
-		float intersection(inout Intersection objectIntersection, inout vec3 vecOrigin, inout vec3 vecDirection, float dblMin, float dblMax) {
-			float dblIntersection = Infinity;
+		float intersection(inout Intersection objIntersection, inout vec3 vecOrigin, inout vec3 vecDirection, float fltMin, float fltMax, bool boolPeek) {
+			float fltIntersection = Infinity;
 
 			vecDirection = normalize(vecDirection);
 
 			for (int intPlane = 0; intPlane < 16; intPlane += 1) {
-				if (intPlane == objectPlanes_length) {
+				if (intPlane == objPlanes_length) {
 					break;
 				}
 
-				vec3 vecDifference = objectPlanes[intPlane].vecLocation - vecOrigin;
+				vec3 vecDifference = objPlanes[intPlane].vecLocation - vecOrigin;
 
-				float dblDenominator = dot(vecDirection, objectPlanes[intPlane].vecNormal);
+				float fltDenominator = dot(vecDirection, objPlanes[intPlane].vecNormal);
 
-				if (abs(dblDenominator) < 0.01) {
+				if (abs(fltDenominator) < 0.01) {
 					continue;
 				}
 
-				float dblDistance = dot(vecDifference, objectPlanes[intPlane].vecNormal) / dblDenominator;
+				float fltDistance = dot(vecDifference, objPlanes[intPlane].vecNormal) / fltDenominator;
 
-				if (dblDistance < dblMin) {
+				if (fltDistance < fltMin) {
 					continue;
 
-				} else if (dblDistance > dblMax) {
+				} else if (fltDistance > fltMax) {
 					continue;
 
-				} else if (dblDistance > dblIntersection) {
+				} else if (fltDistance > fltIntersection) {
 					continue;
 
 				}
 
-				if (dblIntersection == Infinity) {
-					if (objectIntersection.dblDistance != 0.0) {
-						return dblDistance;
-					}
+				if (boolPeek == true) {
+					return fltDistance;
 				}
 
-				dblIntersection = dblDistance;
+				fltIntersection = fltDistance;
 
-				objectIntersection.dblDistance = dblDistance;
-				objectIntersection.vecLocation = vecOrigin + (dblDistance * vecDirection);
-				objectIntersection.vecNormal = objectPlanes[intPlane].vecNormal;
-				objectIntersection.vecColor = objectPlanes[intPlane].vecColor;
-				objectIntersection.dblSpecular = objectPlanes[intPlane].dblSpecular;
-				objectIntersection.dblReflect = objectPlanes[intPlane].dblReflect;
+				objIntersection.fltDistance = fltDistance;
+				objIntersection.vecLocation = vecOrigin + (fltDistance * vecDirection);
+				objIntersection.vecNormal = objPlanes[intPlane].vecNormal;
+				objIntersection.vecColor = objPlanes[intPlane].vecColor;
+				objIntersection.fltSpecular = objPlanes[intPlane].fltSpecular;
+				objIntersection.fltReflect = objPlanes[intPlane].fltReflect;
 
-				float dblCheckerboard = mod(abs(floor(objectIntersection.vecLocation.x) + floor(objectIntersection.vecLocation.z)), 2.0);
+				float fltCheckerboard = mod(abs(floor(objIntersection.vecLocation.x) + floor(objIntersection.vecLocation.z)), 2.0);
 
-				objectIntersection.vecColor *= 0.5 + (0.5 * dblCheckerboard);
+				objIntersection.vecColor *= 0.5 + (0.5 * fltCheckerboard);
 			}
 
 			for (int intSphere = 0; intSphere < 16; intSphere += 1) {
-				if (intSphere == objectSpheres_length) {
+				if (intSphere == objSpheres_length) {
 					break;
 				}
 
-				vec3 vecDifference = vecOrigin - objectSpheres[intSphere].vecLocation;
+				vec3 vecDifference = vecOrigin - objSpheres[intSphere].vecLocation;
 
-				float dblAlpha = dot(vecDirection, vecDifference);
-				float dblDiscriminant = (dblAlpha * dblAlpha) - dot(vecDifference, vecDifference) + (objectSpheres[intSphere].dblRadius * objectSpheres[intSphere].dblRadius);
+				float fltAlpha = dot(vecDirection, vecDifference);
+				float fltDiscriminant = (fltAlpha * fltAlpha) - dot(vecDifference, vecDifference) + (objSpheres[intSphere].fltRadius * objSpheres[intSphere].fltRadius);
 
-				if (dblDiscriminant < 0.01) {
+				if (fltDiscriminant < 0.01) {
 					continue;
 				}
 
-				float dblFirst = (-1.0 * dblAlpha) - sqrt(dblDiscriminant);
-				float dblSecond = (-1.0 * dblAlpha) + sqrt(dblDiscriminant);
-				float dblDistance = Infinity;
+				float fltFirst = (-1.0 * fltAlpha) - sqrt(fltDiscriminant);
+				float fltSecond = (-1.0 * fltAlpha) + sqrt(fltDiscriminant);
+				float fltDistance = Infinity;
 
-				if (dblFirst > dblMin) {
-					if (dblFirst < dblMax) {
-						dblDistance = min(dblDistance, dblFirst);
+				if (fltFirst > fltMin) {
+					if (fltFirst < fltMax) {
+						fltDistance = min(fltDistance, fltFirst);
 					}
 				}
 
-				if (dblSecond > dblMin) {
-					if (dblSecond < dblMax) {
-						dblDistance = min(dblDistance, dblSecond);
+				if (fltSecond > fltMin) {
+					if (fltSecond < fltMax) {
+						fltDistance = min(fltDistance, fltSecond);
 					}
 				}
 
-				if (dblDistance == Infinity) {
+				if (fltDistance == Infinity) {
 					continue;
 
-				} else if (dblDistance > dblIntersection) {
+				} else if (fltDistance > fltIntersection) {
 					continue;
 
 				}
 
-				if (dblIntersection == Infinity) {
-					if (objectIntersection.dblDistance != 0.0) {
-						return dblDistance;
-					}
+				if (boolPeek == true) {
+					return fltDistance;
 				}
 
-				dblIntersection = dblDistance;
+				fltIntersection = fltDistance;
 
-				objectIntersection.dblDistance = dblDistance;
-				objectIntersection.vecLocation = vecOrigin + (dblDistance * vecDirection);
-				objectIntersection.vecNormal = objectIntersection.vecLocation - objectSpheres[intSphere].vecLocation;
-				objectIntersection.vecColor = objectSpheres[intSphere].vecColor;
-				objectIntersection.dblSpecular = objectSpheres[intSphere].dblSpecular;
-				objectIntersection.dblReflect = objectSpheres[intSphere].dblReflect;
+				objIntersection.fltDistance = fltDistance;
+				objIntersection.vecLocation = vecOrigin + (fltDistance * vecDirection);
+				objIntersection.vecNormal = objIntersection.vecLocation - objSpheres[intSphere].vecLocation;
+				objIntersection.vecColor = objSpheres[intSphere].vecColor;
+				objIntersection.fltSpecular = objSpheres[intSphere].fltSpecular;
+				objIntersection.fltReflect = objSpheres[intSphere].fltReflect;
 			}
 
-			if (dblIntersection < dblMax) {
-				objectIntersection.vecNormal = normalize(objectIntersection.vecNormal);
+			if (boolPeek != true) {
+				if (fltIntersection < fltMax) {
+					objIntersection.vecNormal = normalize(objIntersection.vecNormal);
+				}
 			}
 
-			return dblIntersection;
+			return fltIntersection;
 		}
 
-		void raytrace(inout vec3 vecColor, vec3 vecOrigin, vec3 vecDirection, float dblMin, float dblMax) {
+		void raytrace(inout vec3 vecColor, vec3 vecOrigin, vec3 vecDirection, float fltMin, float fltMax) {
 			vecColor = vec3(0.0, 0.0, 0.0);
 
-			float dblReflect = 1.0;
+			float fltReflect = 1.0;
 
 			for (int intRecurse = 0; intRecurse < 8; intRecurse += 1) {
-				Intersection objectIntersection = Intersection(0.0, vec3(0.0, 0.0, 0.0), vec3(0.0, 0.0, 0.0), vec3(0.0, 0.0, 0.0), 0.0, 0.0);
+				Intersection objIntersection = Intersection(0.0, vec3(0.0, 0.0, 0.0), vec3(0.0, 0.0, 0.0), vec3(0.0, 0.0, 0.0), 0.0, 0.0);
 
-				if (intersection(objectIntersection, vecOrigin, vecDirection, dblMin, dblMax) > 10000.0) {
+				if (intersection(objIntersection, vecOrigin, vecDirection, fltMin, fltMax, false) > 10000.0) {
 					break;
 				}
 
-				float dblAngle = abs(dot(vecDirection, objectIntersection.vecNormal));
+				float fltAngle = abs(dot(vecDirection, objIntersection.vecNormal));
 
-				float dblSchlick = (1.0 - objectIntersection.dblReflect) + (objectIntersection.dblReflect * pow(1.0 - dblAngle, 5.0));
+				float fltSchlick = (1.0 - objIntersection.fltReflect) + (objIntersection.fltReflect * pow(1.0 - fltAngle, 5.0));
 
 				for (int intLight = 0; intLight < 16; intLight += 1) {
-					if (intLight == objectLights_length) {
+					if (intLight == objLights_length) {
 						break;
 					}
 
-					vec3 vecLight = objectLights[intLight].vecLocation - objectIntersection.vecLocation;
+					vec3 vecLight = objLights[intLight].vecLocation - objIntersection.vecLocation;
 
-					if (intersection(objectIntersection, objectIntersection.vecLocation, vecLight, 0.01, 10000.0) < 10000.0) {
+					if (intersection(objIntersection, objIntersection.vecLocation, vecLight, 0.01, 10000.0, true) < 10000.0) {
 						continue;
 					}
 
-					float dblDiffuse = dot(vecLight, objectIntersection.vecNormal);
+					float fltDiffuse = dot(vecLight, objIntersection.vecNormal);
 
-					vec3 vecSpecular = vecLight - (2.0 * dblDiffuse * objectIntersection.vecNormal);
+					vec3 vecSpecular = vecLight - (2.0 * fltDiffuse * objIntersection.vecNormal);
 
-					float dblSpecular = max(0.01, pow(dot(vecDirection, vecSpecular), objectIntersection.dblSpecular));
+					float fltSpecular = max(0.01, pow(dot(vecDirection, vecSpecular), objIntersection.fltSpecular));
 
-					vecColor += dblReflect * dblSchlick * (dblDiffuse + dblSpecular) * objectIntersection.vecColor * objectLights[intLight].vecIntensity;
+					vecColor += fltReflect * fltSchlick * (fltDiffuse + fltSpecular) * objIntersection.vecColor * objLights[intLight].vecIntensity;
 				}
 
-				vecColor += dblReflect * dblSchlick * objectIntersection.vecColor * vecAmbient;
+				vecColor += fltReflect * fltSchlick * objIntersection.vecColor * vecAmbient;
 
-				dblReflect *= 1.0 - dblSchlick;
+				fltReflect *= 1.0 - fltSchlick;
 
-				if (dblReflect < 0.01) {
+				if (fltReflect < 0.01) {
 					break;
 				}
 
-				vecOrigin = objectIntersection.vecLocation;
-				vecDirection = vecDirection - (2.0 * dot(vecDirection, objectIntersection.vecNormal) * objectIntersection.vecNormal);
-				dblMin = 0.01;
-				dblMax = 10000.0;
+				vecOrigin = objIntersection.vecLocation;
+				vecDirection = vecDirection - (2.0 * dot(vecDirection, objIntersection.vecNormal) * objIntersection.vecNormal);
+				fltMin = 0.01;
+				fltMax = 10000.0;
 			}
 		}
 
 		void main() {
-			float dblX = (gl_FragCoord.x / float(intWidth)) - 0.5;
-			float dblY = (gl_FragCoord.y / float(intHeight)) - 0.5;
+			float fltX = (gl_FragCoord.x / float(intWidth)) - 0.5;
+			float fltY = (gl_FragCoord.y / float(intHeight)) - 0.5;
 
 			vec3 vecColor = vec3(0.0, 0.0, 0.0);
-			vec3 vecOrigin = vec3(6.0 * cos(dblTime), 5.0, 6.0 * sin(dblTime));
+			vec3 vecOrigin = vec3(6.0 * cos(fltTime), 5.0, 6.0 * sin(fltTime));
 			vec3 vecDirection = vec3(0.0, 1.0, 0.0) - vecOrigin;
 
 			vecDirection = normalize(vecDirection);
@@ -237,7 +235,7 @@ var Shader = (function() {
 			vecRight = cross(vecDirection, vecUp);
 			vecUp = cross(vecRight, vecDirection);
 
-			vecDirection += (dblX * vecRight) + (dblY * vecUp);
+			vecDirection += (fltX * vecRight) + (fltY * vecUp);
 
 			raytrace(vecColor, vecOrigin, vecDirection, 1.0, 10000.0);
 
@@ -245,75 +243,75 @@ var Shader = (function() {
 		}
 	`;
 
-	var objectProgram = null;
+	var objProgram = null;
 
-	function init(objectContext) {
-		objectProgram = objectContext.createProgram();
+	function init(objContext) {
+		objProgram = objContext.createProgram();
 
-		var objectVertexshader = objectContext.createShader(objectContext.VERTEX_SHADER);
-		objectContext.shaderSource(objectVertexshader, strVertex);
-		objectContext.compileShader(objectVertexshader);
-		objectContext.attachShader(objectProgram, objectVertexshader);
-		if (objectContext.getShaderInfoLog(objectVertexshader).length > 0) {
-			throw objectContext.getShaderInfoLog(objectVertexshader);
+		var objVertexshader = objContext.createShader(objContext.VERTEX_SHADER);
+		objContext.shaderSource(objVertexshader, strVertex);
+		objContext.compileShader(objVertexshader);
+		objContext.attachShader(objProgram, objVertexshader);
+		if (objContext.getShaderInfoLog(objVertexshader).length > 0) {
+			throw objContext.getShaderInfoLog(objVertexshader);
 		}
 
-		var objectFragmentshader = objectContext.createShader(objectContext.FRAGMENT_SHADER);
-		objectContext.shaderSource(objectFragmentshader, strFragment);
-		objectContext.compileShader(objectFragmentshader);
-		objectContext.attachShader(objectProgram, objectFragmentshader);
-		if (objectContext.getShaderInfoLog(objectFragmentshader).length > 0) {
-			throw objectContext.getShaderInfoLog(objectFragmentshader);
+		var objFragmentshader = objContext.createShader(objContext.FRAGMENT_SHADER);
+		objContext.shaderSource(objFragmentshader, strFragment);
+		objContext.compileShader(objFragmentshader);
+		objContext.attachShader(objProgram, objFragmentshader);
+		if (objContext.getShaderInfoLog(objFragmentshader).length > 0) {
+			throw objContext.getShaderInfoLog(objFragmentshader);
 		}
 
-		objectContext.linkProgram(objectProgram);
-		objectContext.useProgram(objectProgram);
+		objContext.linkProgram(objProgram);
+		objContext.useProgram(objProgram);
 
-		objectContext.enableVertexAttribArray(objectContext.getAttribLocation(objectProgram, 'vecPosition'));
-		objectContext.bindBuffer(objectContext.ARRAY_BUFFER, objectContext.createBuffer());
-		objectContext.bufferData(objectContext.ARRAY_BUFFER, new Float32Array([ -1.0,  1.0, -1.0, -1.0, 1.0,  1.0, 1.0,  1.0, -1.0, -1.0, 1.0, -1.0 ]), objectContext.STATIC_DRAW);
-		objectContext.vertexAttribPointer(objectContext.getAttribLocation(objectProgram, 'vecPosition'), 2, objectContext.FLOAT, false, 0, 0);
+		objContext.enableVertexAttribArray(objContext.getAttribLocation(objProgram, 'vecPosition'));
+		objContext.bindBuffer(objContext.ARRAY_BUFFER, objContext.createBuffer());
+		objContext.bufferData(objContext.ARRAY_BUFFER, new Float32Array([ -1.0,  1.0, -1.0, -1.0, 1.0,  1.0, 1.0,  1.0, -1.0, -1.0, 1.0, -1.0 ]), objContext.STATIC_DRAW);
+		objContext.vertexAttribPointer(objContext.getAttribLocation(objProgram, 'vecPosition'), 2, objContext.FLOAT, false, 0, 0);
 
-		objectContext.uniform1i(objectContext.getUniformLocation(objectProgram, 'intWidth'), intWidth);
-		objectContext.uniform1i(objectContext.getUniformLocation(objectProgram, 'intHeight'), intHeight);
+		objContext.uniform1i(objContext.getUniformLocation(objProgram, 'intWidth'), intWidth);
+		objContext.uniform1i(objContext.getUniformLocation(objProgram, 'intHeight'), intHeight);
 
-		objectContext.uniform1i(objectContext.getUniformLocation(objectProgram, 'objectPlanes_length'), objectPlanes.length);
-		for (var intPlane = 0; intPlane < objectPlanes.length; intPlane += 1) {
-			objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectPlanes[' + intPlane + '].vecLocation'), objectPlanes[intPlane].vecLocation);
-			objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectPlanes[' + intPlane + '].vecNormal'), objectPlanes[intPlane].vecNormal);
-			objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectPlanes[' + intPlane + '].vecColor'), objectPlanes[intPlane].vecColor);
-			objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'objectPlanes[' + intPlane + '].dblSpecular'), objectPlanes[intPlane].dblSpecular);
-			objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'objectPlanes[' + intPlane + '].dblReflect'), objectPlanes[intPlane].dblReflect);
+		objContext.uniform1i(objContext.getUniformLocation(objProgram, 'objPlanes_length'), objPlanes.length);
+		for (var intPlane = 0; intPlane < objPlanes.length; intPlane += 1) {
+			objContext.uniform3fv(objContext.getUniformLocation(objProgram, 'objPlanes[' + intPlane + '].vecLocation'), objPlanes[intPlane].vecLocation);
+			objContext.uniform3fv(objContext.getUniformLocation(objProgram, 'objPlanes[' + intPlane + '].vecNormal'), objPlanes[intPlane].vecNormal);
+			objContext.uniform3fv(objContext.getUniformLocation(objProgram, 'objPlanes[' + intPlane + '].vecColor'), objPlanes[intPlane].vecColor);
+			objContext.uniform1f(objContext.getUniformLocation(objProgram, 'objPlanes[' + intPlane + '].fltSpecular'), objPlanes[intPlane].fltSpecular);
+			objContext.uniform1f(objContext.getUniformLocation(objProgram, 'objPlanes[' + intPlane + '].fltReflect'), objPlanes[intPlane].fltReflect);
 		}
 
-		objectContext.uniform1i(objectContext.getUniformLocation(objectProgram, 'objectSpheres_length'), objectSpheres.length);
-		for (var intSphere = 0; intSphere < objectSpheres.length; intSphere += 1) {
-			objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectSpheres[' + intSphere + '].vecLocation'), objectSpheres[intSphere].vecLocation);
-			objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'objectSpheres[' + intSphere + '].dblRadius'), objectSpheres[intSphere].dblRadius);
-			objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectSpheres[' + intSphere + '].vecColor'), objectSpheres[intSphere].vecColor);
-			objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'objectSpheres[' + intSphere + '].dblSpecular'), objectSpheres[intSphere].dblSpecular);
-			objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'objectSpheres[' + intSphere + '].dblReflect'), objectSpheres[intSphere].dblReflect);
+		objContext.uniform1i(objContext.getUniformLocation(objProgram, 'objSpheres_length'), objSpheres.length);
+		for (var intSphere = 0; intSphere < objSpheres.length; intSphere += 1) {
+			objContext.uniform3fv(objContext.getUniformLocation(objProgram, 'objSpheres[' + intSphere + '].vecLocation'), objSpheres[intSphere].vecLocation);
+			objContext.uniform1f(objContext.getUniformLocation(objProgram, 'objSpheres[' + intSphere + '].fltRadius'), objSpheres[intSphere].fltRadius);
+			objContext.uniform3fv(objContext.getUniformLocation(objProgram, 'objSpheres[' + intSphere + '].vecColor'), objSpheres[intSphere].vecColor);
+			objContext.uniform1f(objContext.getUniformLocation(objProgram, 'objSpheres[' + intSphere + '].fltSpecular'), objSpheres[intSphere].fltSpecular);
+			objContext.uniform1f(objContext.getUniformLocation(objProgram, 'objSpheres[' + intSphere + '].fltReflect'), objSpheres[intSphere].fltReflect);
 		}
 
-		objectContext.uniform1i(objectContext.getUniformLocation(objectProgram, 'objectLights_length'), objectLights.length);
-		for (var intLight = 0; intLight < objectLights.length; intLight += 1) {
-			objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectLights[' + intLight + '].vecLocation'), objectLights[intLight].vecLocation);
-			objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'objectLights[' + intLight + '].vecIntensity'), objectLights[intLight].vecIntensity);
+		objContext.uniform1i(objContext.getUniformLocation(objProgram, 'objLights_length'), objLights.length);
+		for (var intLight = 0; intLight < objLights.length; intLight += 1) {
+			objContext.uniform3fv(objContext.getUniformLocation(objProgram, 'objLights[' + intLight + '].vecLocation'), objLights[intLight].vecLocation);
+			objContext.uniform3fv(objContext.getUniformLocation(objProgram, 'objLights[' + intLight + '].vecIntensity'), objLights[intLight].vecIntensity);
 		}
 
-		objectContext.uniform3fv(objectContext.getUniformLocation(objectProgram, 'vecAmbient'), vecAmbient);
+		objContext.uniform3fv(objContext.getUniformLocation(objProgram, 'vecAmbient'), vecAmbient);
 	}
 
-	function render(objectContext) {
-		if (objectProgram === null) {
-			init(objectContext);
+	function render(objContext) {
+		if (objProgram === null) {
+			init(objContext);
 		}
 
-		objectContext.uniform1f(objectContext.getUniformLocation(objectProgram, 'dblTime'), dblTime);
+		objContext.uniform1f(objContext.getUniformLocation(objProgram, 'fltTime'), fltTime);
 
-		objectContext.clearColor(0.0, 0.0, 0.0, 1.0);
-		objectContext.clear(objectContext.COLOR_BUFFER_BIT);
-		objectContext.drawArrays(objectContext.TRIANGLES, 0, 6);
+		objContext.clearColor(0.0, 0.0, 0.0, 1.0);
+		objContext.clear(objContext.COLOR_BUFFER_BIT);
+		objContext.drawArrays(objContext.TRIANGLES, 0, 6);
 	}
 
 	return {
