@@ -1,429 +1,429 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-		<link rel="stylesheet" type="text/css" href="http://content.sniklaus.com/content.css">
-		<script type="text/javascript" src="http://content.sniklaus.com/content.js"></script>
-	</head>
-	<body style="margin:0px auto 0px auto; max-width:720px;">
+        <link rel="stylesheet" type="text/css" href="http://content.sniklaus.com/content.css">
+        <script type="text/javascript" src="http://content.sniklaus.com/content.js"></script>
+    </head>
+    <body style="margin:0px auto 0px auto; max-width:720px;">
 
 <!-- ########################################################## -->
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/1.58.4/plotly-cartesian.min.js"></script>
 
 <div class="btn-bar">
-	<a class="btn btn-primary" href="/webdev">
-		<div><i class="fas fa-user-graduate"></i></div>
-		<span>Class</span>
-	</a>
+    <a class="btn btn-primary" href="/webdev">
+        <div><i class="fa-solid fa-user-graduate"></i></div>
+        <span>Class</span>
+    </a>
 
-	<a class="btn btn-primary" href="https://www.reddit.com/r/programming/comments/7k4v5t/">
-		<div><i class="fab fa-reddit-alien"></i></div>
-		<span>Reddit</span>
-	</a>
+    <a class="btn btn-primary" href="https://www.reddit.com/r/programming/comments/7k4v5t/">
+        <div><i class="fa-brands fa-reddit-alien"></i></div>
+        <span>Reddit</span>
+    </a>
 
-	<a class="btn btn-primary" href="https://github.com/sniklaus/wasm-raytracer">
-		<div><i class="fab fa-github"></i></div>
-		<span>GitHub</span>
-	</a>
+    <a class="btn btn-primary" href="https://github.com/sniklaus/wasm-raytracer">
+        <div><i class="fa-brands fa-github"></i></div>
+        <span>GitHub</span>
+    </a>
 </div>
 
 <div class="card">
-	<div class="card-header text-white bg-primary">
-		WASM Raytracer
-	</div>
-	
-	<div class="card-body">
-		<p>While teaching a web development class, I wanted to present some benchmarks that show the performance benefits of asm.js as well as WebAssembly. I was unfortunately not able to find a suitable reference. Therefore, I implemented a simplistic raytracer in JavaScript as well as in C++ with a similar code structure while utilizing Emscripten to compile the C++ raytracer to asm.js as well as WebAssembly. For fun, I also translated the code to GLSL and am utilizing WebGL to leverage GPU computing.</p>
-	</div>
+    <div class="card-header text-white bg-primary">
+        WASM Raytracer
+    </div>
+    
+    <div class="card-body">
+        <p>While teaching a web development class, I wanted to present some benchmarks that show the performance benefits of asm.js as well as WebAssembly. I was unfortunately not able to find a suitable reference. Therefore, I implemented a simplistic raytracer in JavaScript as well as in C++ with a similar code structure while utilizing Emscripten to compile the C++ raytracer to asm.js as well as WebAssembly. For fun, I also translated the code to GLSL and am utilizing WebGL to leverage GPU computing.</p>
+    </div>
 </div>
 
 <div class="card">
-	<div class="card-body">
-		<table cellpadding="0" cellspacing="0" border="0" style="margin:0px auto 0px auto;">
-			<tr>
-				<td style="vertical-align:top;">
-					<div class="list-group" style="cursor:pointer; font-size:13px; width:135px;;">
-						<a class="list-group-item">
-							JavaScript
-						</a>
-						<a class="list-group-item">
-							asm.js
-						</a>
-						<a class="list-group-item active">
-							WebAssembly
-						</a>
-						<a class="list-group-item">
-							Shader
-						</a>
-					</div>
+    <div class="card-body">
+        <table cellpadding="0" cellspacing="0" border="0" style="margin:0px auto 0px auto;">
+            <tr>
+                <td style="vertical-align:top;">
+                    <div class="list-group" style="cursor:pointer; font-size:13px; width:135px;;">
+                        <a class="list-group-item">
+                            JavaScript
+                        </a>
+                        <a class="list-group-item">
+                            asm.js
+                        </a>
+                        <a class="list-group-item active">
+                            WebAssembly
+                        </a>
+                        <a class="list-group-item">
+                            Shader
+                        </a>
+                    </div>
 
-					<div style="width:135px; height:288px;"></div>
-				</td>
-				<td style="width:15px;">
-				
-				</td>
-				<td style="vertical-align:top;">
-					<canvas style="display:none; max-width:100%;"></canvas>
-					<canvas style="display:none; max-width:100%;"></canvas>
-					<canvas style="display:none; max-width:100%;"></canvas>
-					<canvas style="display:none; max-width:100%;"></canvas>
-				</td>
-			</tr>
-		</table>
-	</div>
+                    <div style="width:135px; height:288px;"></div>
+                </td>
+                <td style="width:15px;">
+                
+                </td>
+                <td style="vertical-align:top;">
+                    <canvas style="display:none; max-width:100%;"></canvas>
+                    <canvas style="display:none; max-width:100%;"></canvas>
+                    <canvas style="display:none; max-width:100%;"></canvas>
+                    <canvas style="display:none; max-width:100%;"></canvas>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 <script type="text/javascript">
-	jQuery('.list-group-item')
-		.on('click', function() {
-			jQuery('.list-group-item.active')
-				.removeClass('active')
-			;
+    jQuery('.list-group-item')
+        .on('click', function() {
+            jQuery('.list-group-item.active')
+                .removeClass('active')
+            ;
 
-			jQuery(this)
-				.addClass('active')
-			;
+            jQuery(this)
+                .addClass('active')
+            ;
 
-			jQuery('.card').eq(1).find('div').eq(2).get(0).data[0].y = []; Plotly.redraw(jQuery('.card').eq(1).find('div').eq(2).get(0));
-		})
-	;
-	
-	Plotly.newPlot(jQuery('.card').eq(1).find('div').eq(2).get(0), [ {
-		'boxpoints': 'all',
-		'hoverinfo': 'none',
-		'jitter': 0.0,
-		'marker': {
-			'color': '#007BFF'
-		},
-		'orientation': 'v',
-		'pointpos': 2.0,
-		'type': 'box',
-		'y': []
-	} ], {
-		'margin': {
-			'l': 55,
-			'r': 20,
-			'b': 5,
-			't': 25
-		},
-		'showlegend': false,
-		'xaxis': {
-			'showticklabels': false,
-			'zeroline': false
-		},
-		'yaxis': {
-			'tickformat': '.1f',
-			'zeroline': false
-		}
-	}, {
-		'displayModeBar': false
-	});
+            jQuery('.card').eq(1).find('div').eq(2).get(0).data[0].y = []; Plotly.redraw(jQuery('.card').eq(1).find('div').eq(2).get(0));
+        })
+    ;
+    
+    Plotly.newPlot(jQuery('.card').eq(1).find('div').eq(2).get(0), [ {
+        'boxpoints': 'all',
+        'hoverinfo': 'none',
+        'jitter': 0.0,
+        'marker': {
+            'color': '#007BFF'
+        },
+        'orientation': 'v',
+        'pointpos': 2.0,
+        'type': 'box',
+        'y': []
+    } ], {
+        'margin': {
+            'l': 55,
+            'r': 20,
+            'b': 5,
+            't': 25
+        },
+        'showlegend': false,
+        'xaxis': {
+            'showticklabels': false,
+            'zeroline': false
+        },
+        'yaxis': {
+            'tickformat': '.1f',
+            'zeroline': false
+        }
+    }, {
+        'displayModeBar': false
+    });
 </script>
 
 <script type="text/javascript">
-	var intWidth = 470;
-	var intHeight = 470;
+    var intWidth = 470;
+    var intHeight = 470;
 
-	var objPlanes = [{
-		vecLocation: [ 0.0, 0.0, 0.0 ],
-		vecNormal: [ 0.0, 1.0, 0.0 ],
-		vecColor: [ 0.7, 0.7, 0.7 ],
-		fltSpecular: 10.0,
-		fltReflect: 0.1
-	}];
+    var objPlanes = [{
+        vecLocation: [ 0.0, 0.0, 0.0 ],
+        vecNormal: [ 0.0, 1.0, 0.0 ],
+        vecColor: [ 0.7, 0.7, 0.7 ],
+        fltSpecular: 10.0,
+        fltReflect: 0.1
+    }];
 
-	var objSpheres = [{
-		vecLocation: [ 0.0, 2.0, 0.0 ],
-		fltRadius: 1.0,
-		vecColor: [ 1.0, 1.0, 1.0 ],
-		fltSpecular: 20.0,
-		fltReflect: 0.7
-	}, {
-		vecLocation: [ 0.0, 1.0, 3.0 ],
-		fltRadius: 0.7,
-		vecColor: [ 121.0 / 255.0, 85.0 / 255.0, 72.0 / 255.0 ],
-		fltSpecular: 10.0,
-		fltReflect: 0.0
-	}, {
-		vecLocation: [ 0.0, 1.0, -3.0 ],
-		fltRadius: 0.7,
-		vecColor: [ 76.0 / 255.0, 175.0 / 255.0, 80.0 / 255.0 ],
-		fltSpecular: 10.0,
-		fltReflect: 0.0
-	}, {
-		vecLocation: [ 3.0, 1.0, 0.0 ],
-		fltRadius: 0.7,
-		vecColor: [ 41.0 / 255.0, 182.0 / 255.0, 246.0 / 255.0 ],
-		fltSpecular: 10.0,
-		fltReflect: 0.0
-	}, {
-		vecLocation: [ -3.0, 1.0, 0.0 ],
-		fltRadius: 0.7,
-		vecColor: [ 255.0 / 255.0, 167.0 / 255.0, 38.0 / 255.0 ],
-		fltSpecular: 10.0,
-		fltReflect: 0.0
-	}];
+    var objSpheres = [{
+        vecLocation: [ 0.0, 2.0, 0.0 ],
+        fltRadius: 1.0,
+        vecColor: [ 1.0, 1.0, 1.0 ],
+        fltSpecular: 20.0,
+        fltReflect: 0.7
+    }, {
+        vecLocation: [ 0.0, 1.0, 3.0 ],
+        fltRadius: 0.7,
+        vecColor: [ 121.0 / 255.0, 85.0 / 255.0, 72.0 / 255.0 ],
+        fltSpecular: 10.0,
+        fltReflect: 0.0
+    }, {
+        vecLocation: [ 0.0, 1.0, -3.0 ],
+        fltRadius: 0.7,
+        vecColor: [ 76.0 / 255.0, 175.0 / 255.0, 80.0 / 255.0 ],
+        fltSpecular: 10.0,
+        fltReflect: 0.0
+    }, {
+        vecLocation: [ 3.0, 1.0, 0.0 ],
+        fltRadius: 0.7,
+        vecColor: [ 41.0 / 255.0, 182.0 / 255.0, 246.0 / 255.0 ],
+        fltSpecular: 10.0,
+        fltReflect: 0.0
+    }, {
+        vecLocation: [ -3.0, 1.0, 0.0 ],
+        fltRadius: 0.7,
+        vecColor: [ 255.0 / 255.0, 167.0 / 255.0, 38.0 / 255.0 ],
+        fltSpecular: 10.0,
+        fltReflect: 0.0
+    }];
 
-	var objLights = [{
-		vecLocation: [ 0.0, 10.0, 5.0 ],
-		vecIntensity: [ 0.8, 0.8, 0.8 ]
-	}];
+    var objLights = [{
+        vecLocation: [ 0.0, 10.0, 5.0 ],
+        vecIntensity: [ 0.8, 0.8, 0.8 ]
+    }];
 
-	var vecAmbient = [ 0.2, 0.2, 0.2 ];
+    var vecAmbient = [ 0.2, 0.2, 0.2 ];
 
-	var fltTime = 0.3;
+    var fltTime = 0.3;
 </script>
 
 <script type="text/javascript" src="javascript.js"></script>
 <script type="text/javascript">
-	Javascript_boolLoaded = false;
+    Javascript_boolLoaded = false;
 
-	var objCanvas = jQuery('canvas').eq(0).get(0);
+    var objCanvas = jQuery('canvas').eq(0).get(0);
 
-	objCanvas.width = intWidth;
-	objCanvas.height = intHeight;
+    objCanvas.width = intWidth;
+    objCanvas.height = intHeight;
 
-	Javascript_objContext = objCanvas.getContext('2d');
-	Javascript_objImage = Javascript_objContext.getImageData(0, 0, intWidth, intHeight);
+    Javascript_objContext = objCanvas.getContext('2d');
+    Javascript_objImage = Javascript_objContext.getImageData(0, 0, intWidth, intHeight);
 
-	Javascript_boolLoaded = true;
+    Javascript_boolLoaded = true;
 </script>
 
 <script type="text/javascript" src="emscripten-asm.js"></script>
 <script type="text/javascript">
-	Assembly_boolLoaded = false;
+    Assembly_boolLoaded = false;
 
-	Assembly().then(function(Module) {
-		window.Assembly = Module;
+    Assembly().then(function(Module) {
+        window.Assembly = Module;
 
-		window.Assembly.render = Assembly.cwrap('render', null, [ 'number' ]);
+        window.Assembly.render = Assembly.cwrap('render', null, [ 'number' ]);
 
-		window.Assembly.uniform1i = Assembly.cwrap('uniform1i', null, [ 'string', 'number', 'number' ]);
-		window.Assembly.uniform1f = Assembly.cwrap('uniform1f', null, [ 'string', 'number', 'number' ]);
-		window.Assembly.uniform3fv = Assembly.cwrap('uniform3fv', null, [ 'string', 'number', 'number', 'number', 'number' ]);
+        window.Assembly.uniform1i = Assembly.cwrap('uniform1i', null, [ 'string', 'number', 'number' ]);
+        window.Assembly.uniform1f = Assembly.cwrap('uniform1f', null, [ 'string', 'number', 'number' ]);
+        window.Assembly.uniform3fv = Assembly.cwrap('uniform3fv', null, [ 'string', 'number', 'number', 'number', 'number' ]);
 
-		Assembly.uniform1i('intWidth', 0, intWidth);
-		Assembly.uniform1i('intHeight', 0, intHeight);
+        Assembly.uniform1i('intWidth', 0, intWidth);
+        Assembly.uniform1i('intHeight', 0, intHeight);
 
-		Assembly.uniform1i('objPlanes_length', 0, objPlanes.length);
-		for (var intPlane = 0; intPlane < objPlanes.length; intPlane += 1) {
-			Assembly.uniform3fv('objPlanes[].vecLocation', intPlane, objPlanes[intPlane].vecLocation[0], objPlanes[intPlane].vecLocation[1], objPlanes[intPlane].vecLocation[2]);
-			Assembly.uniform3fv('objPlanes[].vecNormal', intPlane, objPlanes[intPlane].vecNormal[0], objPlanes[intPlane].vecNormal[1], objPlanes[intPlane].vecNormal[2]);
-			Assembly.uniform3fv('objPlanes[].vecColor', intPlane, objPlanes[intPlane].vecColor[0], objPlanes[intPlane].vecColor[1], objPlanes[intPlane].vecColor[2]);
-			Assembly.uniform1f('objPlanes[].fltSpecular', intPlane, objPlanes[intPlane].fltSpecular);
-			Assembly.uniform1f('objPlanes[].fltReflect', intPlane, objPlanes[intPlane].fltReflect);
-		}
+        Assembly.uniform1i('objPlanes_length', 0, objPlanes.length);
+        for (var intPlane = 0; intPlane < objPlanes.length; intPlane += 1) {
+            Assembly.uniform3fv('objPlanes[].vecLocation', intPlane, objPlanes[intPlane].vecLocation[0], objPlanes[intPlane].vecLocation[1], objPlanes[intPlane].vecLocation[2]);
+            Assembly.uniform3fv('objPlanes[].vecNormal', intPlane, objPlanes[intPlane].vecNormal[0], objPlanes[intPlane].vecNormal[1], objPlanes[intPlane].vecNormal[2]);
+            Assembly.uniform3fv('objPlanes[].vecColor', intPlane, objPlanes[intPlane].vecColor[0], objPlanes[intPlane].vecColor[1], objPlanes[intPlane].vecColor[2]);
+            Assembly.uniform1f('objPlanes[].fltSpecular', intPlane, objPlanes[intPlane].fltSpecular);
+            Assembly.uniform1f('objPlanes[].fltReflect', intPlane, objPlanes[intPlane].fltReflect);
+        }
 
-		Assembly.uniform1i('objSpheres_length', 0, objSpheres.length);
-		for (var intSphere = 0; intSphere < objSpheres.length; intSphere += 1) {
-			Assembly.uniform3fv('objSpheres[].vecLocation', intSphere, objSpheres[intSphere].vecLocation[0], objSpheres[intSphere].vecLocation[1], objSpheres[intSphere].vecLocation[2]);
-			Assembly.uniform1f('objSpheres[].fltRadius', intSphere, objSpheres[intSphere].fltRadius);
-			Assembly.uniform3fv('objSpheres[].vecColor', intSphere, objSpheres[intSphere].vecColor[0], objSpheres[intSphere].vecColor[1], objSpheres[intSphere].vecColor[2]);
-			Assembly.uniform1f('objSpheres[].fltSpecular', intSphere, objSpheres[intSphere].fltSpecular);
-			Assembly.uniform1f('objSpheres[].fltReflect', intSphere, objSpheres[intSphere].fltReflect);
-		}
+        Assembly.uniform1i('objSpheres_length', 0, objSpheres.length);
+        for (var intSphere = 0; intSphere < objSpheres.length; intSphere += 1) {
+            Assembly.uniform3fv('objSpheres[].vecLocation', intSphere, objSpheres[intSphere].vecLocation[0], objSpheres[intSphere].vecLocation[1], objSpheres[intSphere].vecLocation[2]);
+            Assembly.uniform1f('objSpheres[].fltRadius', intSphere, objSpheres[intSphere].fltRadius);
+            Assembly.uniform3fv('objSpheres[].vecColor', intSphere, objSpheres[intSphere].vecColor[0], objSpheres[intSphere].vecColor[1], objSpheres[intSphere].vecColor[2]);
+            Assembly.uniform1f('objSpheres[].fltSpecular', intSphere, objSpheres[intSphere].fltSpecular);
+            Assembly.uniform1f('objSpheres[].fltReflect', intSphere, objSpheres[intSphere].fltReflect);
+        }
 
-		Assembly.uniform1i('objLights_length', 0, objLights.length);
-		for (var intLight = 0; intLight < objLights.length; intLight += 1) {
-			Assembly.uniform3fv('objLights[].vecLocation', intLight, objLights[intLight].vecLocation[0], objLights[intLight].vecLocation[1], objLights[intLight].vecLocation[2]);
-			Assembly.uniform3fv('objLights[].vecIntensity', intLight, objLights[intLight].vecIntensity[0], objLights[intLight].vecIntensity[1], objLights[intLight].vecIntensity[2]);
-		}
+        Assembly.uniform1i('objLights_length', 0, objLights.length);
+        for (var intLight = 0; intLight < objLights.length; intLight += 1) {
+            Assembly.uniform3fv('objLights[].vecLocation', intLight, objLights[intLight].vecLocation[0], objLights[intLight].vecLocation[1], objLights[intLight].vecLocation[2]);
+            Assembly.uniform3fv('objLights[].vecIntensity', intLight, objLights[intLight].vecIntensity[0], objLights[intLight].vecIntensity[1], objLights[intLight].vecIntensity[2]);
+        }
 
-		Assembly.uniform3fv('vecAmbient', 0, vecAmbient[0], vecAmbient[1], vecAmbient[2]);
+        Assembly.uniform3fv('vecAmbient', 0, vecAmbient[0], vecAmbient[1], vecAmbient[2]);
 
-		var objCanvas = jQuery('canvas').eq(1).get(0);
+        var objCanvas = jQuery('canvas').eq(1).get(0);
 
-		objCanvas.width = intWidth;
-		objCanvas.height = intHeight;
+        objCanvas.width = intWidth;
+        objCanvas.height = intHeight;
 
-		Assembly_objContext = objCanvas.getContext('2d');
-		Assembly_objPixels = new Uint8Array(Assembly.HEAPU8.buffer, Assembly._malloc(intWidth * intHeight * 4), intWidth * intHeight * 4);
+        Assembly_objContext = objCanvas.getContext('2d');
+        Assembly_objPixels = new Uint8Array(Assembly.HEAPU8.buffer, Assembly._malloc(intWidth * intHeight * 4), intWidth * intHeight * 4);
 
-		Assembly_boolLoaded = true;
-	});
+        Assembly_boolLoaded = true;
+    });
 </script>
 
 <script type="text/javascript" src="emscripten-wasm.js"></script>
 <script type="text/javascript">
-	Webassembly_boolLoaded = false;
+    Webassembly_boolLoaded = false;
 
-	Webassembly().then(function(Module) {
-		window.Webassembly = Module;
+    Webassembly().then(function(Module) {
+        window.Webassembly = Module;
 
-		window.Webassembly.render = Webassembly.cwrap('render', null, ['number']);
+        window.Webassembly.render = Webassembly.cwrap('render', null, ['number']);
 
-		window.Webassembly.uniform1i = Webassembly.cwrap('uniform1i', null, [ 'string', 'number', 'number' ]);
-		window.Webassembly.uniform1f = Webassembly.cwrap('uniform1f', null, [ 'string', 'number', 'number' ]);
-		window.Webassembly.uniform3fv = Webassembly.cwrap('uniform3fv', null, [ 'string', 'number', 'number', 'number', 'number' ]);
+        window.Webassembly.uniform1i = Webassembly.cwrap('uniform1i', null, [ 'string', 'number', 'number' ]);
+        window.Webassembly.uniform1f = Webassembly.cwrap('uniform1f', null, [ 'string', 'number', 'number' ]);
+        window.Webassembly.uniform3fv = Webassembly.cwrap('uniform3fv', null, [ 'string', 'number', 'number', 'number', 'number' ]);
 
-		Webassembly.uniform1i('intWidth', 0, intWidth);
-		Webassembly.uniform1i('intHeight', 0, intHeight);
+        Webassembly.uniform1i('intWidth', 0, intWidth);
+        Webassembly.uniform1i('intHeight', 0, intHeight);
 
-		Webassembly.uniform1i('objPlanes_length', 0, objPlanes.length);
-		for (var intPlane = 0; intPlane < objPlanes.length; intPlane += 1) {
-			Webassembly.uniform3fv('objPlanes[].vecLocation', intPlane, objPlanes[intPlane].vecLocation[0], objPlanes[intPlane].vecLocation[1], objPlanes[intPlane].vecLocation[2]);
-			Webassembly.uniform3fv('objPlanes[].vecNormal', intPlane, objPlanes[intPlane].vecNormal[0], objPlanes[intPlane].vecNormal[1], objPlanes[intPlane].vecNormal[2]);
-			Webassembly.uniform3fv('objPlanes[].vecColor', intPlane, objPlanes[intPlane].vecColor[0], objPlanes[intPlane].vecColor[1], objPlanes[intPlane].vecColor[2]);
-			Webassembly.uniform1f('objPlanes[].fltSpecular', intPlane, objPlanes[intPlane].fltSpecular);
-			Webassembly.uniform1f('objPlanes[].fltReflect', intPlane, objPlanes[intPlane].fltReflect);
-		}
+        Webassembly.uniform1i('objPlanes_length', 0, objPlanes.length);
+        for (var intPlane = 0; intPlane < objPlanes.length; intPlane += 1) {
+            Webassembly.uniform3fv('objPlanes[].vecLocation', intPlane, objPlanes[intPlane].vecLocation[0], objPlanes[intPlane].vecLocation[1], objPlanes[intPlane].vecLocation[2]);
+            Webassembly.uniform3fv('objPlanes[].vecNormal', intPlane, objPlanes[intPlane].vecNormal[0], objPlanes[intPlane].vecNormal[1], objPlanes[intPlane].vecNormal[2]);
+            Webassembly.uniform3fv('objPlanes[].vecColor', intPlane, objPlanes[intPlane].vecColor[0], objPlanes[intPlane].vecColor[1], objPlanes[intPlane].vecColor[2]);
+            Webassembly.uniform1f('objPlanes[].fltSpecular', intPlane, objPlanes[intPlane].fltSpecular);
+            Webassembly.uniform1f('objPlanes[].fltReflect', intPlane, objPlanes[intPlane].fltReflect);
+        }
 
-		Webassembly.uniform1i('objSpheres_length', 0, objSpheres.length);
-		for (var intSphere = 0; intSphere < objSpheres.length; intSphere += 1) {
-			Webassembly.uniform3fv('objSpheres[].vecLocation', intSphere, objSpheres[intSphere].vecLocation[0], objSpheres[intSphere].vecLocation[1], objSpheres[intSphere].vecLocation[2]);
-			Webassembly.uniform1f('objSpheres[].fltRadius', intSphere, objSpheres[intSphere].fltRadius);
-			Webassembly.uniform3fv('objSpheres[].vecColor', intSphere, objSpheres[intSphere].vecColor[0], objSpheres[intSphere].vecColor[1], objSpheres[intSphere].vecColor[2]);
-			Webassembly.uniform1f('objSpheres[].fltSpecular', intSphere, objSpheres[intSphere].fltSpecular);
-			Webassembly.uniform1f('objSpheres[].fltReflect', intSphere, objSpheres[intSphere].fltReflect);
-		}
+        Webassembly.uniform1i('objSpheres_length', 0, objSpheres.length);
+        for (var intSphere = 0; intSphere < objSpheres.length; intSphere += 1) {
+            Webassembly.uniform3fv('objSpheres[].vecLocation', intSphere, objSpheres[intSphere].vecLocation[0], objSpheres[intSphere].vecLocation[1], objSpheres[intSphere].vecLocation[2]);
+            Webassembly.uniform1f('objSpheres[].fltRadius', intSphere, objSpheres[intSphere].fltRadius);
+            Webassembly.uniform3fv('objSpheres[].vecColor', intSphere, objSpheres[intSphere].vecColor[0], objSpheres[intSphere].vecColor[1], objSpheres[intSphere].vecColor[2]);
+            Webassembly.uniform1f('objSpheres[].fltSpecular', intSphere, objSpheres[intSphere].fltSpecular);
+            Webassembly.uniform1f('objSpheres[].fltReflect', intSphere, objSpheres[intSphere].fltReflect);
+        }
 
-		Webassembly.uniform1i('objLights_length', 0, objLights.length);
-		for (var intLight = 0; intLight < objLights.length; intLight += 1) {
-			Webassembly.uniform3fv('objLights[].vecLocation', intLight, objLights[intLight].vecLocation[0], objLights[intLight].vecLocation[1], objLights[intLight].vecLocation[2]);
-			Webassembly.uniform3fv('objLights[].vecIntensity', intLight, objLights[intLight].vecIntensity[0], objLights[intLight].vecIntensity[1], objLights[intLight].vecIntensity[2]);
-		}
+        Webassembly.uniform1i('objLights_length', 0, objLights.length);
+        for (var intLight = 0; intLight < objLights.length; intLight += 1) {
+            Webassembly.uniform3fv('objLights[].vecLocation', intLight, objLights[intLight].vecLocation[0], objLights[intLight].vecLocation[1], objLights[intLight].vecLocation[2]);
+            Webassembly.uniform3fv('objLights[].vecIntensity', intLight, objLights[intLight].vecIntensity[0], objLights[intLight].vecIntensity[1], objLights[intLight].vecIntensity[2]);
+        }
 
-		Webassembly.uniform3fv('vecAmbient', 0, vecAmbient[0], vecAmbient[1], vecAmbient[2]);
+        Webassembly.uniform3fv('vecAmbient', 0, vecAmbient[0], vecAmbient[1], vecAmbient[2]);
 
-		var objCanvas = jQuery('canvas').eq(2).get(0);
+        var objCanvas = jQuery('canvas').eq(2).get(0);
 
-		objCanvas.width = intWidth;
-		objCanvas.height = intHeight;
+        objCanvas.width = intWidth;
+        objCanvas.height = intHeight;
 
-		Webassembly_objContext = objCanvas.getContext('2d');
-		Webassembly_objPixels = new Uint8Array(Webassembly.HEAPU8.buffer, Webassembly._malloc(intWidth * intHeight * 4), intWidth * intHeight * 4);
+        Webassembly_objContext = objCanvas.getContext('2d');
+        Webassembly_objPixels = new Uint8Array(Webassembly.HEAPU8.buffer, Webassembly._malloc(intWidth * intHeight * 4), intWidth * intHeight * 4);
 
-		Webassembly_boolLoaded = true;
-	});
+        Webassembly_boolLoaded = true;
+    });
 </script>
 
 <script type="text/javascript" src="shader.js"></script>
 <script type="text/javascript">
-	Shader_boolLoaded = false;
+    Shader_boolLoaded = false;
 
-	var objCanvas = jQuery('canvas').eq(3).get(0)
+    var objCanvas = jQuery('canvas').eq(3).get(0)
 
-	objCanvas.width = intWidth;
-	objCanvas.height = intHeight;
+    objCanvas.width = intWidth;
+    objCanvas.height = intHeight;
 
-	Shader_objContext = objCanvas.getContext('webgl');
-	Shader_objTimerext = Shader_objContext.getExtension('EXT_disjoint_timer_query');
-	Shader_objTimerquery = null;
+    Shader_objContext = objCanvas.getContext('webgl');
+    Shader_objTimerext = Shader_objContext.getExtension('EXT_disjoint_timer_query');
+    Shader_objTimerquery = null;
 
-	if (Shader_objTimerext != null) {
-		Shader_objTimerquery = Shader_objTimerext.createQueryEXT();
-	}
+    if (Shader_objTimerext != null) {
+        Shader_objTimerquery = Shader_objTimerext.createQueryEXT();
+    }
 
-	Shader_boolLoaded = true;
+    Shader_boolLoaded = true;
 </script>
 
 <script type="text/javascript">
-	var funcLoop = function() {
-		var intMethod = jQuery('.list-group-item.active').index();
+    var funcLoop = function() {
+        var intMethod = jQuery('.list-group-item.active').index();
 
-		for (var intCanvas = 0; intCanvas < 4; intCanvas += 1) {
-			if (intCanvas === intMethod) {
-				jQuery('canvas').eq(intCanvas)
-					.css({
-						'display': 'block'
-					})
-				;
+        for (var intCanvas = 0; intCanvas < 4; intCanvas += 1) {
+            if (intCanvas === intMethod) {
+                jQuery('canvas').eq(intCanvas)
+                    .css({
+                        'display': 'block'
+                    })
+                ;
 
-			} else if (intCanvas !== intMethod) {
-				jQuery('canvas').eq(intCanvas)
-					.css({
-						'display': 'none'
-					})
-				;
+            } else if (intCanvas !== intMethod) {
+                jQuery('canvas').eq(intCanvas)
+                    .css({
+                        'display': 'none'
+                    })
+                ;
 
-			}
-		}
+            }
+        }
 
-		if (intMethod === 0) {
-			if (Javascript_boolLoaded === false) {
-				window.setTimeout(funcLoop, 10); return;
-			}
-			
-		} else if (intMethod === 1) {
-			if (Assembly_boolLoaded === false) {
-				window.setTimeout(funcLoop, 10); return;
-			}
-			
-		} else if (intMethod === 2) {
-			if (Webassembly_boolLoaded === false) {
-				window.setTimeout(funcLoop, 10); return;
-			}
-			
-		} else if (intMethod === 3) {
-			if (Shader_boolLoaded === false) {
-				window.setTimeout(funcLoop, 10); return;
-			}
-			
-		}
+        if (intMethod === 0) {
+            if (Javascript_boolLoaded === false) {
+                window.setTimeout(funcLoop, 10); return;
+            }
+            
+        } else if (intMethod === 1) {
+            if (Assembly_boolLoaded === false) {
+                window.setTimeout(funcLoop, 10); return;
+            }
+            
+        } else if (intMethod === 2) {
+            if (Webassembly_boolLoaded === false) {
+                window.setTimeout(funcLoop, 10); return;
+            }
+            
+        } else if (intMethod === 3) {
+            if (Shader_boolLoaded === false) {
+                window.setTimeout(funcLoop, 10); return;
+            }
+            
+        }
 
-		var fltElapsed = null;
-		if (intMethod === 3) {
-			if (Shader_objTimerquery !== null) {
-				if (Shader_objTimerext.getQueryobjEXT(Shader_objTimerquery, Shader_objTimerext.QUERY_RESULT_AVAILABLE_EXT) === true) {
-					fltElapsed = Shader_objTimerext.getQueryobjEXT(Shader_objTimerquery, Shader_objTimerext.QUERY_RESULT_EXT) / 1000.0 / 1000.0;
-				}
-			}
-		}
+        var fltElapsed = null;
+        if (intMethod === 3) {
+            if (Shader_objTimerquery !== null) {
+                if (Shader_objTimerext.getQueryobjEXT(Shader_objTimerquery, Shader_objTimerext.QUERY_RESULT_AVAILABLE_EXT) === true) {
+                    fltElapsed = Shader_objTimerext.getQueryobjEXT(Shader_objTimerquery, Shader_objTimerext.QUERY_RESULT_EXT) / 1000.0 / 1000.0;
+                }
+            }
+        }
 
-		var fltBefore = performance.now();
-		if (intMethod === 3) {
-			if (Shader_objTimerquery !== null) {
-				Shader_objTimerext.beginQueryEXT(Shader_objTimerext.TIME_ELAPSED_EXT, Shader_objTimerquery);
-			}
-		}
+        var fltBefore = performance.now();
+        if (intMethod === 3) {
+            if (Shader_objTimerquery !== null) {
+                Shader_objTimerext.beginQueryEXT(Shader_objTimerext.TIME_ELAPSED_EXT, Shader_objTimerquery);
+            }
+        }
 
-		fltTime += 0.003;
+        fltTime += 0.003;
 
-		if (intMethod === 0) {
-			Javascript.render(Javascript_objImage.data);
-			Javascript_objContext.putImageData(Javascript_objImage, 0, 0);
-			
-		} else if (intMethod === 1) {
-			Assembly.uniform1f('fltTime', 0, fltTime);
-			Assembly.render(Assembly_objPixels.byteOffset);
-			Assembly_objContext.putImageData(new ImageData(new Uint8ClampedArray(Assembly_objPixels), intWidth, intHeight), 0, 0);
-			
-		} else if (intMethod === 2) {
-			Webassembly.uniform1f('fltTime', 0, fltTime);
-			Webassembly.render(Webassembly_objPixels.byteOffset);
-			Webassembly_objContext.putImageData(new ImageData(new Uint8ClampedArray(Webassembly_objPixels), intWidth, intHeight), 0, 0);
-			
-		} else if (intMethod === 3) {
-			Shader.render(Shader_objContext);
-			
-		}
+        if (intMethod === 0) {
+            Javascript.render(Javascript_objImage.data);
+            Javascript_objContext.putImageData(Javascript_objImage, 0, 0);
+            
+        } else if (intMethod === 1) {
+            Assembly.uniform1f('fltTime', 0, fltTime);
+            Assembly.render(Assembly_objPixels.byteOffset);
+            Assembly_objContext.putImageData(new ImageData(new Uint8ClampedArray(Assembly_objPixels), intWidth, intHeight), 0, 0);
+            
+        } else if (intMethod === 2) {
+            Webassembly.uniform1f('fltTime', 0, fltTime);
+            Webassembly.render(Webassembly_objPixels.byteOffset);
+            Webassembly_objContext.putImageData(new ImageData(new Uint8ClampedArray(Webassembly_objPixels), intWidth, intHeight), 0, 0);
+            
+        } else if (intMethod === 3) {
+            Shader.render(Shader_objContext);
+            
+        }
 
-		var fltAfter = performance.now();
-		if (intMethod === 3) {
-			if (Shader_objTimerquery !== null) {
-				Shader_objTimerext.endQueryEXT(Shader_objTimerext.TIME_ELAPSED_EXT);
-			}
-		}
+        var fltAfter = performance.now();
+        if (intMethod === 3) {
+            if (Shader_objTimerquery !== null) {
+                Shader_objTimerext.endQueryEXT(Shader_objTimerext.TIME_ELAPSED_EXT);
+            }
+        }
 
-		if (jQuery('.card').eq(1).find('div').eq(2).get(0).data[0].y.length > 1) {
-			if (jQuery('.card').eq(1).find('div').eq(2).get(0).data[0].y[0] > 2.0 * jQuery('.card').eq(1).find('div').eq(2).get(0).data[0].y[1]) {
-				jQuery('.card').eq(1).find('div').eq(2).get(0).data[0].y.shift();
-			}
-		}
+        if (jQuery('.card').eq(1).find('div').eq(2).get(0).data[0].y.length > 1) {
+            if (jQuery('.card').eq(1).find('div').eq(2).get(0).data[0].y[0] > 2.0 * jQuery('.card').eq(1).find('div').eq(2).get(0).data[0].y[1]) {
+                jQuery('.card').eq(1).find('div').eq(2).get(0).data[0].y.shift();
+            }
+        }
 
-		jQuery('.card').eq(1).find('div').eq(2).get(0).data[0].y.push(fltElapsed || (fltAfter - fltBefore)); Plotly.redraw(jQuery('.card').eq(1).find('div').eq(2).get(0));
+        jQuery('.card').eq(1).find('div').eq(2).get(0).data[0].y.push(fltElapsed || (fltAfter - fltBefore)); Plotly.redraw(jQuery('.card').eq(1).find('div').eq(2).get(0));
 
-		window.setTimeout(funcLoop, 10);
-	};
+        window.setTimeout(funcLoop, 10);
+    };
 
-	funcLoop();
+    funcLoop();
 </script>
 
 <!-- ########################################################## -->
 
-	</body>
+    </body>
 </html>
